@@ -1,0 +1,32 @@
+{
+  "name": "barnacal",
+  "version": "0.1.0",
+  "description": "A simple menu bar app for viewing a calendar",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build:bsb;npm run build:webpack",
+    "build:bsb": "bsb -make-world",
+    "build:webpack": "webpack -p",
+    "clean": "npm run clean:bsb;npm run clean:webpack",
+    "clean:bsb": "bsb -clean-world",
+    "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js'",
+    "start": "node scripts/startDev.js",
+    "start:bsb": "npm run build:bsb -- -w",
+    "start:webpack": "node scripts/webpackDevServer.js",
+    "start:electron": "electron ."
+  },
+  "author": "Mike Engel <mike@mike-engel.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "electron": "^1.6.11",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
+  "devDependencies": {
+    "bs-platform": "^1.8.2",
+    "chalk": "^2.0.1",
+    "figlet": "^1.2.0",
+    "reason-react": "^0.2.3",
+    "webpack": "^3.4.1"
+  }
+}
