@@ -12,7 +12,7 @@
     "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js'",
     "start": "node scripts/startDev.js",
     "start:bsb": "npm run build:bsb -- -w",
-    "start:webpack": "node scripts/webpackDevServer.js",
+    "start:webpack": "webpack -w",
     "start:electron": "electron ."
   },
   "author": "Mike Engel <mike@mike-engel.com>",

@@ -1,11 +1,8 @@
-var path = require("path");
-var electron = require("electron");
-var BrowserWindow = electron.BrowserWindow;
-const { app, Menu, Tray } = require("electron");
+const path = require("path");
+const electron = require("electron");
+const BrowserWindow = electron.BrowserWindow;
 
-var trayIcon = null;
-var window = null;
-
+const { app, ipcMain, Menu, MenuItem, Tray } = electron;
 const TRAY_ARROW_HEIGHT = 50;
 const WINDOW_WIDTH = 600;
 const WINDOW_HEIGHT = 400;
@@ -15,9 +12,12 @@ const VERT_PADDING = 15;
 process.on("beforeExit", () => app.quit());
 
 app.on("ready", function() {
-  if (process.platform === "darwin") app.dock.hide();
+  const menu = new Menu();
+  const iconName = "design/IconTemplate@2x.png";
+  const iconPath = path.join(__dirname, iconName);
+  const trayIcon = new Tray(iconPath);
 
-  window = new BrowserWindow({
+  let window = new BrowserWindow({
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     resizable: false,
@@ -25,6 +25,8 @@ app.on("ready", function() {
     transparent: true,
     show: false
   });
+
+  if (process.platform === "darwin") app.dock.hide();
 
   window.loadURL("file://" + __dirname + "/index.html");
 
@@ -36,20 +38,17 @@ app.on("ready", function() {
     window.hide();
   });
 
-  const iconName = "design/IconTemplate@2x.png";
-  const iconPath = path.join(__dirname, iconName);
-
-  trayIcon = new Tray(iconPath);
   trayIcon.setToolTip("Barnacal");
 
   trayIcon.on("click", event => {
-    var screen = electron.screen;
+    const { screen } = electron;
     const cursorPosition = screen.getCursorScreenPoint();
     const primarySize = screen.getPrimaryDisplay().workAreaSize;
     const trayPositionVert =
       cursorPosition.y >= primarySize.height / 2 ? "bottom" : "top";
     const trayPositionHoriz =
       cursorPosition.x >= primarySize.width / 2 ? "right" : "left";
+
     window.setPosition(getTrayPosX(), getTrayPosY());
     window.isVisible() ? window.hide() : window.show();
 
@@ -68,6 +67,7 @@ app.on("ready", function() {
           : horizBounds.right - WINDOW_WIDTH;
       }
     }
+
     function getTrayPosY() {
       return trayPositionVert == "bottom"
         ? cursorPosition.y - WINDOW_HEIGHT - VERT_PADDING
@@ -75,12 +75,8 @@ app.on("ready", function() {
     }
   });
 
-  const { Menu, MenuItem } = require("electron");
-  var menu = new Menu();
-
   menu.append(new MenuItem({ label: "Quit", click: () => app.quit() }));
 
-  var ipcMain = require("electron").ipcMain;
   ipcMain.on("show-config-menu", event => {
     menu.popup(window);
   });

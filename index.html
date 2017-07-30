@@ -9,23 +9,6 @@
 
 <body>
   <div id="app"></div>
-  <div class="container">
-    <div class="popover">
-      <div class="header">
-        <h1>Hello World</h1>
-      </div>
-      <div class="menu">
-        <a class="config" href="#" onclick="return config();">&nbsp;</a>
-      </div>
-    </div>
-  </div>
-  <script>
-    function config() {
-      const ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.send('show-config-menu');
-    }
-
-  </script>
   <script src="public/main.js"></script>
 </body>
 

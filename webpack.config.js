@@ -8,5 +8,5 @@ module.exports = {
     path: path.join(__dirname, "./public"),
     publicPath: "/public"
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+  target: "electron-main"
 };

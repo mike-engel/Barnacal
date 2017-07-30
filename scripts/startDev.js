@@ -1,23 +1,17 @@
 const path = require("path");
 const chalk = require("chalk");
-const spawn = require("child_process").spawn;
-const exec = require("child_process").exec;
+const { spawn, exec } = require("child_process");
 const EventEmitter = require("events");
 const figlet = require("figlet");
 
 const PORT = 8080;
-
 class CompileEmitter extends EventEmitter {}
-
 const compileEmitter = new CompileEmitter();
-
 const executionProgram = "npm";
+
 const bsb = spawn(`${executionProgram}`, ["run", "start:bsb"]);
-
 const webpack = spawn(`${executionProgram}`, ["run", "start:webpack"]);
-
 const electron = spawn(`${executionProgram}`, ["run", "start:electron"]);
-
 const berror = spawn("berror", ["--path-to-refmttype", "refmttype"]);
 
 const compileStatus = {
