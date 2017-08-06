@@ -11,7 +11,6 @@ const executionProgram = "npm";
 
 const bsb = spawn(`${executionProgram}`, ["run", "start:bsb"]);
 const webpack = spawn(`${executionProgram}`, ["run", "start:webpack"]);
-const electron = spawn(`${executionProgram}`, ["run", "start:electron"]);
 const berror = spawn("berror", ["--path-to-refmttype", "refmttype"]);
 
 const compileStatus = {
@@ -52,18 +51,12 @@ webpack.stdout.on("data", data => {
       msg: str
     };
   } else if (str.includes("webpack: Compiled successfully")) {
-    compileStatus.webpack = {
-      status: "success",
-      msg: "OK"
-    };
+    compileStatus.webpack = { status: "success", msg: "OK" };
   } else {
     if (str.includes("webpack: Failed to compile")) {
       return;
     }
-    compileStatus.webpack = {
-      status: "compiling",
-      msg: "OK"
-    };
+    compileStatus.webpack = { status: "compiling", msg: "OK" };
   }
   compileEmitter.emit("log");
 });
@@ -105,10 +98,6 @@ compileEmitter.on("log", () => {
   figlet("Barnacle", { font: "Slant" }, (err, data) => {
     clearConsole();
     process.stdout.write(chalk.cyan(data));
-    process.stdout.write("\n");
-    process.stdout.write(
-      chalk.magenta(`Serving your content at localhost:${JSON.stringify(PORT)}`)
-    );
     process.stdout.write("\n\n");
     const { bsb, webpack } = compileStatus;
     process.stdout.write(chalk.yellow("[BUCKLESCRIPT]"));

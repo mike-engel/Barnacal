@@ -1,19 +1,28 @@
- external send : string => unit = "" [@@bs.scope "ipcRenderer"] [@@bs.module "electron"];
-
-let show_config_menu _evt => send "show-config-menu";
 let component = ReasonReact.statelessComponent "Index";
+let container_styles = ReactDOMRe.Style.make
+  height::"255px"
+  ();
+let caret_styles = ReactDOMRe.Style.make
+  borderLeft::"solid transparent 10px"
+  borderRight::"solid transparent 10px"
+  borderBottom::"solid #000 10px"
+  top::"0"
+  content::" "
+  height::"10px"
+  left::"50%"
+  marginLeft::"-13px"
+  position::"absolute"
+  width::"0"
+  ();
 let make _children => {
   ...component,
   render: fun _self => {
-    <div className="container">
-      <div className="popover">
-        <div className="header">
-          <h1> (ReasonReact.stringToElement "Hello World") </h1>
-        </div>
-        <div className="menu">
-          <a className="config" href="#" onClick=show_config_menu> </a>
-        </div>
-      </div>
+    <div style=(container_styles)>
+      <Popover>
+        <Header />
+        <Menu />
+      </Popover>
+      <div style=(caret_styles) />
     </div>
   }
 };

@@ -4,8 +4,8 @@ const BrowserWindow = electron.BrowserWindow;
 
 const { app, ipcMain, Menu, MenuItem, Tray } = electron;
 const TRAY_ARROW_HEIGHT = 50;
-const WINDOW_WIDTH = 600;
-const WINDOW_HEIGHT = 400;
+const WINDOW_WIDTH = 250;
+const WINDOW_HEIGHT = 300;
 const HORIZ_PADDING = 15;
 const VERT_PADDING = 15;
 
@@ -28,7 +28,11 @@ app.on("ready", function() {
 
   if (process.platform === "darwin") app.dock.hide();
 
-  window.loadURL("file://" + __dirname + "/index.html");
+  window.loadURL(
+    `file://${__dirname}/index${process.env.NODE_ENV !== "production"
+      ? ".dev"
+      : ""}.html`
+  );
 
   window.on("close", function() {
     window = null;

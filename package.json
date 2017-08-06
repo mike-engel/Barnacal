@@ -12,12 +12,13 @@
     "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js'",
     "start": "node scripts/startDev.js",
     "start:bsb": "npm run build:bsb -- -w",
-    "start:webpack": "webpack -w",
+    "start:webpack": "node scripts/webpackDevServer.js",
     "start:electron": "electron ."
   },
   "author": "Mike Engel <mike@mike-engel.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "date-fns": "^1.28.5",
     "electron": "^1.6.11",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
@@ -27,6 +28,8 @@
     "chalk": "^2.0.1",
     "figlet": "^1.2.0",
     "reason-react": "^0.2.3",
-    "webpack": "^3.4.1"
+    "webpack": "^3.4.1",
+    "webpack-dev-server": "^2.6.1",
+    "write-file-webpack-plugin": "^4.1.0"
   }
 }
