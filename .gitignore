@@ -4,6 +4,7 @@ Thumbs.db
 node_modules
 bs
 public
+dist
 
 .merlin
 
