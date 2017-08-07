@@ -10,6 +10,8 @@
     "clean": "npm run clean:bsb;npm run clean:webpack",
     "clean:bsb": "bsb -clean-world",
     "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js'",
+    "dist": "electron-builder -mwl",
+    "pack": "electron-builder -mwl --dir",
     "start": "node scripts/startDev.js",
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
@@ -34,5 +36,16 @@
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.6.1",
     "write-file-webpack-plugin": "^4.1.0"
+  },
+  "build": {
+    "appId": "com.mike-engel.barnacal",
+    "productName": "Barnacal",
+    "compression": "normal",
+    "mac": {
+      "icon": "Design/icons/app/AppIcon.icns"
+    },
+    "win": {
+      "icon": "Design/icons/app/AppIcon.ico"
+    }
   }
 }

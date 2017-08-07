@@ -22,8 +22,8 @@ let window = null;
 
 process.on("beforeExit", () => app.quit());
 
-const getIconName = () =>
-  `Design/icons/BarnacalIcon${getDate(new Date())}Template@2x.png`;
+const getTrayIconName = () =>
+  `Design/icons/tray/BarnacalIcon${getDate(new Date())}Template@2x.png`;
 
 // set the app to open on login
 if (!isDev && firstRun()) {
@@ -74,15 +74,14 @@ const openTray = (window, tray) => () => {
 
 app.on("ready", function() {
   const menu = new Menu();
-  const iconName = getIconName();
-  const iconPath = path.join(__dirname, iconName);
+  const iconPath = path.join(__dirname, getTrayIconName());
   const htmlPath = `file://${__dirname}/index${isProd ? "" : ".dev"}.html`;
 
   trayIcon = new Tray(iconPath);
 
   // update the icon every day
   const iconUpdateInterval = setInterval(() => {
-    trayIcon.setImage(getIconName());
+    trayIcon.setImage(getTrayIconName());
   }, 60000);
 
   let window = new BrowserWindow({
