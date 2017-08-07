@@ -4,7 +4,7 @@ let week_styles = ReactDOMRe.Style.make textAlign::"center" color::"#FFF" ();
 
 let day_styles is_today =>
   ReactDOMRe.Style.make
-    padding::"0.25em 0" color::(is_today ? "#7FDBFF" : "#FFF") fontWeight::"700" ();
+    padding::"0.25em 0" color::(is_today ? "#F012BE" : "#FFF") fontWeight::"700" ();
 
 let weekday idx date => {
   let date_element =

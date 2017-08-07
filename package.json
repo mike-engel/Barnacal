@@ -13,13 +13,15 @@
     "start": "node scripts/startDev.js",
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
-    "start:electron": "electron ."
+    "start:electron": "electron .",
+    "watch:electron": "watchexec -r -s SIGKILL -f 'index.js' -f 'index.dev.html' npm run start:electron"
   },
   "author": "Mike Engel <mike@mike-engel.com>",
   "license": "UNLICENSED",
   "dependencies": {
     "date-fns": "^1.28.5",
     "electron": "^1.6.11",
+    "first-run": "^1.2.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   },

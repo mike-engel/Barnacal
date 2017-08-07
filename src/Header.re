@@ -20,12 +20,13 @@ let header_text_styles =
     fontSize::"22px"
     padding::"0.5em 0"
     flexGrow::"2"
+    cursor::"pointer"
     ();
 
 let navigation_styles =
   ReactDOMRe.Style.make textDecoration::"none" color::"#FFF" fontSize::"1.2rem" width::"50px" ();
 
-let make ::self ::date ::onNextMonth ::onLastMonth _children => {
+let make ::self ::date ::onNextMonth ::onLastMonth ::resetDate _children => {
   ...component,
   render: fun _self => {
     let current_month = DateFns.format_date date "MMMM YYYY";
@@ -36,7 +37,9 @@ let make ::self ::date ::onNextMonth ::onLastMonth _children => {
         dangerouslySetInnerHTML={"__html": "&larr;"}
         onClick=(self.ReasonReact.update onLastMonth)
       />
-      <h1 style=header_text_styles> (ReasonReact.stringToElement current_month) </h1>
+      <h1 style=header_text_styles onClick=(self.ReasonReact.update resetDate)>
+        (ReasonReact.stringToElement current_month)
+      </h1>
       <a
         href="#"
         style=navigation_styles

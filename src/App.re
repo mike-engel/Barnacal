@@ -11,7 +11,7 @@ let caret_styles =
     content::"' '"
     height::"10px"
     left::"50%"
-    marginLeft::"-13px"
+    marginLeft::"-10px"
     position::"absolute"
     width::"0"
     ();
@@ -20,21 +20,20 @@ let onNextMonth _evt self => ReasonReact.Update (DateFns.add_months self.ReasonR
 
 let onLastMonth _evt self => ReasonReact.Update (DateFns.sub_months self.ReasonReact.state 1);
 
-let reset_date _evt _self =>
-  if DomFns.hidden {
-    ReasonReact.Update (Js.Date.now ())
-  } else {
-    ReasonReact.NoUpdate
-  };
+let resetDate _evt _self => ReasonReact.Update (Js.Date.now ());
 
 let make _children => {
   ...component,
   initialState: fun () => Js.Date.now (),
   render: fun self => {
     let date = self.state;
-    DomFns.add_event_listener "visibilitychange" (self.ReasonReact.update reset_date);
+    DomFns.add_event_listener "visibilitychange" (self.ReasonReact.update resetDate);
     <div style=container_styles>
-      <Popover> <Header self date onNextMonth onLastMonth /> <Calendar date /> <Menu /> </Popover>
+      <Popover>
+        <Header self date onNextMonth onLastMonth resetDate />
+        <Calendar date />
+        <Menu />
+      </Popover>
       <div style=caret_styles />
     </div>
   }

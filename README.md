@@ -26,7 +26,16 @@ Finally, open a new terminal window/tab and start the electron process. This wil
 npx electron .
 
 # option two
-npm run start:webpack
+npm run start:electron
+```
+
+If you want the electron app to be reloaded when you edit the html or JS files, then you'll want to install `watchexec` first, then run the watch command.
+
+```sh
+# install watchexec if you don't have it already
+brew install watchexec
+
+npm run watch:electron
 ```
 
 # License

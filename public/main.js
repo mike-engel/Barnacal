@@ -36,7 +36,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "dc390b9e85e0e01547c9"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "6ecdffaceb7c8cc0ad28"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -23426,7 +23426,7 @@ var caret_styles = {
   content: "' '",
   height: "10px",
   left: "50%",
-  marginLeft: "-13px",
+  marginLeft: "-10px",
   position: "absolute",
   top: "0",
   width: "0"
@@ -23440,23 +23440,19 @@ function onLastMonth(_, self) {
   return /* Update */Block.__(0, [Sub_months(self[/* state */3], 1)]);
 }
 
-function reset_date(_, _$1) {
-  if (document.hidden) {
-    return /* Update */Block.__(0, [Date.now()]);
-  } else {
-    return /* NoUpdate */0;
-  }
+function resetDate(_, _$1) {
+  return /* Update */Block.__(0, [Date.now()]);
 }
 
 function make() {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function (self) {
       var date = self[/* state */3];
-      document.addEventListener("visibilitychange", Curry._1(self[/* update */2], reset_date));
+      document.addEventListener("visibilitychange", Curry._1(self[/* update */2], resetDate));
       return React.createElement("div", {
                   style: container_styles
                 }, ReasonReact.element(/* None */0, /* None */0, Popover.make(/* array */[
-                          ReasonReact.element(/* None */0, /* None */0, Header.make(self, date, onNextMonth, onLastMonth, /* array */[])),
+                          ReasonReact.element(/* None */0, /* None */0, Header.make(self, date, onNextMonth, onLastMonth, resetDate, /* array */[])),
                           ReasonReact.element(/* None */0, /* None */0, Calendar.make(date, /* array */[])),
                           ReasonReact.element(/* None */0, /* None */0, Menu.make(/* array */[]))
                         ])), React.createElement("div", {
@@ -23474,7 +23470,7 @@ exports.container_styles = container_styles;
 exports.caret_styles     = caret_styles;
 exports.onNextMonth      = onNextMonth;
 exports.onLastMonth      = onLastMonth;
-exports.reset_date       = reset_date;
+exports.resetDate        = resetDate;
 exports.make             = make;
 /* component Not a pure module */
 
@@ -25853,6 +25849,7 @@ var header_styles = {
 
 var header_text_styles = {
   color: "#fff",
+  cursor: "pointer",
   fontSize: "22px",
   lineHeight: "40px",
   margin: "0",
@@ -25867,7 +25864,7 @@ var navigation_styles = {
   width: "50px"
 };
 
-function make(self, date, onNextMonth, onLastMonth, _) {
+function make(self, date, onNextMonth, onLastMonth, resetDate, _) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
       var current_month = Format_date(date, "MMMM YYYY");
@@ -25881,7 +25878,8 @@ function make(self, date, onNextMonth, onLastMonth, _) {
                         __html: "&larr;"
                       }
                     }), React.createElement("h1", {
-                      style: header_text_styles
+                      style: header_text_styles,
+                      onClick: Curry._1(self[/* update */2], resetDate)
                     }, current_month), React.createElement("a", {
                       style: navigation_styles,
                       href: "#",
@@ -41160,7 +41158,7 @@ var week_styles = {
 
 function day_styles(is_today) {
   return {
-          color: is_today !== 0 ? "#7FDBFF" : "#FFF",
+          color: is_today !== 0 ? "#F012BE" : "#FFF",
           fontWeight: "700",
           padding: "0.25em 0"
         };
