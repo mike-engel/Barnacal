@@ -1,6 +1,6 @@
 {
   "name": "barnacal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A simple menu bar app for viewing a calendar",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,8 @@
     "clean": "npm run clean:bsb;npm run clean:webpack",
     "clean:bsb": "bsb -clean-world",
     "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js'",
-    "dist": "electron-builder -mwl",
-    "pack": "electron-builder -mwl --dir",
+    "dist": "npm run build; electron-builder -mwl",
+    "pack": "npm run build; electron-builder -mwl --dir",
     "start": "node scripts/startDev.js",
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
@@ -22,6 +22,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "date-fns": "^1.28.5",
+    "electron-is-dev": "^0.3.0",
     "first-run": "^1.2.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
@@ -40,7 +41,8 @@
   "build": {
     "appId": "com.mike-engel.barnacal",
     "productName": "Barnacal",
-    "compression": "normal",
+    "compression": "maximum",
+    "files": ["Design/icons/**/*", "public/main.js", "index.js", "index.html"],
     "mac": {
       "icon": "Design/icons/app/AppIcon.icns"
     },

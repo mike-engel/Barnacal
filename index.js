@@ -4,6 +4,7 @@ const BrowserWindow = electron.BrowserWindow;
 const getDate = require("date-fns/get_date");
 const firstRun = require("first-run");
 const { platform } = require("os");
+const isDev = require("electron-is-dev");
 
 const { app, ipcMain, Menu, MenuItem, Tray } = electron;
 const TRAY_ARROW_HEIGHT = 50;
@@ -11,9 +12,6 @@ const WINDOW_WIDTH = 300;
 const WINDOW_HEIGHT = 300;
 const HORIZ_PADDING = 15;
 const VERT_PADDING = 15;
-const env = process.env.NODE_ENV;
-const isDev = env === "development";
-const isProd = env === "production";
 const isWin = platform === "win32";
 
 // prevent garbage collection & icon from dissapearing
@@ -75,13 +73,13 @@ const openTray = (window, tray) => () => {
 app.on("ready", function() {
   const menu = new Menu();
   const iconPath = path.join(__dirname, getTrayIconName());
-  const htmlPath = `file://${__dirname}/index${isProd ? "" : ".dev"}.html`;
+  const htmlPath = `file://${__dirname}/index${isDev ? ".dev" : ""}.html`;
 
   trayIcon = new Tray(iconPath);
 
   // update the icon every day
   const iconUpdateInterval = setInterval(() => {
-    trayIcon.setImage(getTrayIconName());
+    trayIcon.setImage(path.join(__dirname, getTrayIconName()));
   }, 60000);
 
   let window = new BrowserWindow({
