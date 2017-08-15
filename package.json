@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:bsb;npm run build:webpack",
     "build:bsb": "bsb -make-world",
-    "build:webpack": "webpack -p",
+    "build:webpack": "NODE_ENV=production webpack -p",
     "clean": "npm run clean:bsb;npm run clean:webpack",
     "clean:bsb": "bsb -clean-world",
     "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js'",
@@ -24,18 +24,21 @@
     "date-fns": "^1.28.5",
     "electron-is-dev": "^0.3.0",
     "first-run": "^1.2.0",
+    "raven": "^2.1.1",
+    "raven-js": "^3.17.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   },
   "devDependencies": {
     "bs-platform": "^1.8.2",
-    "chalk": "^2.0.1",
-    "electron": "^1.6.11",
-    "electron-builder": "^19.19.1",
+    "chalk": "^2.1.0",
+    "electron": "^1.7.6",
+    "electron-builder": "^19.22.2",
     "figlet": "^1.2.0",
     "reason-react": "^0.2.3",
-    "webpack": "^3.4.1",
-    "webpack-dev-server": "^2.6.1",
+    "release": "^1.4.0",
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1",
     "write-file-webpack-plugin": "^4.1.0"
   },
   "build": {

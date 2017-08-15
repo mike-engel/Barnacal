@@ -1,11 +1,13 @@
 const path = require("path");
 const electron = require("electron");
-const BrowserWindow = electron.BrowserWindow;
 const getDate = require("date-fns/get_date");
 const firstRun = require("first-run");
 const { platform } = require("os");
 const isDev = require("electron-is-dev");
+const raven = require("raven");
+const { version } = require("./package.json");
 
+const BrowserWindow = electron.BrowserWindow;
 const { app, ipcMain, Menu, MenuItem, Tray } = electron;
 const TRAY_ARROW_HEIGHT = 50;
 const WINDOW_WIDTH = 300;
@@ -13,6 +15,13 @@ const WINDOW_HEIGHT = 300;
 const HORIZ_PADDING = 15;
 const VERT_PADDING = 15;
 const isWin = platform === "win32";
+
+if (!isDev) {
+  Raven.config(
+    "https://d29fde94d1814ac09585e75e67d565a5:909153b5c7e94afe81b3a7af1aad1a31@sentry.io/203834",
+    { release: version }
+  ).install();
+}
 
 // prevent garbage collection & icon from dissapearing
 let trayIcon = null;
