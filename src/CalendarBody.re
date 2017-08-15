@@ -5,18 +5,18 @@ let component = ReasonReact.statelessComponent "CalendarBody";
 let table_styles = ReactDOMRe.Style.make ();
 
 let week_of_month date day_of_month => {
-  let first_of_month = DateFns.start_of_month date;
-  let first_weekday = DateFns.get_day first_of_month;
+  let first_of_month = FFI.DateFns.start_of_month date;
+  let first_weekday = FFI.DateFns.get_day first_of_month;
   let offset = day_of_month + first_weekday - 1;
   offset / 7
 };
 
 let month_date date idx _val => {
   let day_of_month = idx + 1;
-  let date = DateFns.set_date date day_of_month;
-  let day_of_week = DateFns.get_day date;
+  let date = FFI.DateFns.set_date date day_of_month;
+  let day_of_week = FFI.DateFns.get_day date;
   let week = week_of_month date day_of_month;
-  let is_today = DateFns.is_today date;
+  let is_today = FFI.DateFns.is_today date;
   (week, day_of_week, day_of_month, is_today)
 };
 
@@ -39,7 +39,7 @@ let week_component idx week => <Week key=(string_of_int idx) week />;
 let make ::date _children => {
   ...component,
   render: fun _self => {
-    let day_count = DateFns.get_days_in_month date;
+    let day_count = FFI.DateFns.get_days_in_month date;
     let weeks = parse_weeks date day_count;
     ReasonReact.createDomElement
       "tbody" props::{"style": table_styles} (Array.mapi week_component weeks)
