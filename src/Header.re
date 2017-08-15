@@ -29,7 +29,7 @@ let navigation_styles =
 let make ::self ::date ::onNextMonth ::onLastMonth ::resetDate _children => {
   ...component,
   render: fun _self => {
-    let current_month = DateFns.format_date date "MMMM YYYY";
+    let current_month = FFI.DateFns.format_date date "MMMM YYYY";
     <div style=header_styles>
       <a
         href="#"

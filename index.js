@@ -34,7 +34,7 @@ const getTrayIconName = () =>
 
 // set the app to open on login
 if (!isDev && firstRun()) {
-  app.setLoginItemSettings({ openAtLogin: true });
+  app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true });
 }
 
 const quitApp = (app, interval) => () => {
