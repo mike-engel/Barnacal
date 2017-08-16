@@ -3,7 +3,7 @@ let component = ReasonReact.statelessComponent "Popover";
 let popover_styles =
   ReactDOMRe.Style.make
     borderRadius::"5px"
-    height::"270px"
+    height::"280px"
     width::"300px"
     padding::"0"
     backgroundColor::"#000"
