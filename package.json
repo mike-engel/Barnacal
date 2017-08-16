@@ -9,9 +9,9 @@
     "build:webpack": "NODE_ENV=production webpack -p",
     "clean": "npm run clean:bsb;npm run clean:webpack",
     "clean:bsb": "bsb -clean-world",
-    "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js'",
-    "dist": "npm run build; electron-builder -mwl",
-    "pack": "npm run build; electron-builder -mwl --dir",
+    "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js' dist",
+    "dist": "npm run clean:project; npm run build; electron-builder -mwl",
+    "pack": "npm run clean:project; npm run build; electron-builder -mwl --dir",
     "start": "node scripts/startDev.js",
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
@@ -45,12 +45,7 @@
     "appId": "com.mike-engel.barnacal",
     "productName": "Barnacal",
     "compression": "maximum",
-    "files": [
-      "Design/icons/**/*",
-      "public/main.js",
-      "index.js",
-      "index.html"
-    ],
+    "files": ["Design/icons/**/*", "public/main.js", "index.js", "index.html"],
     "mac": {
       "icon": "Design/icons/app/AppIcon.icns"
     },
