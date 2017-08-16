@@ -17,10 +17,11 @@ const VERT_PADDING = 15;
 const isWin = platform === "win32";
 
 if (!isDev) {
-  Raven.config(
-    "https://d29fde94d1814ac09585e75e67d565a5:909153b5c7e94afe81b3a7af1aad1a31@sentry.io/203834",
-    { release: version }
-  ).install();
+  raven
+    .config("'https://dae4fe8d64c34c7fb75319d6394f1a11@sentry.io/204280'", {
+      release: version
+    })
+    .install();
 }
 
 // prevent garbage collection & icon from dissapearing
