@@ -45,17 +45,15 @@
     "appId": "com.mike-engel.barnacal",
     "productName": "Barnacal",
     "compression": "maximum",
-    "files": [
-      "Design/icons/**/*",
-      "public/main.js",
-      "index.js",
-      "index.html"
-    ],
+    "files": ["Design/icons/**/*", "public/main.js", "index.js", "index.html"],
     "mac": {
       "icon": "Design/icons/app/AppIcon.icns"
     },
     "win": {
       "icon": "Design/icons/app/AppIcon.ico"
+    },
+    "linux": {
+      "category": "Utility"
     }
   }
 }
