@@ -24,7 +24,7 @@
     "date-fns": "^1.28.5",
     "electron-is-dev": "^0.3.0",
     "first-run": "^1.2.0",
-    "raven": "^2.1.1",
+    "raven": "^2.1.2",
     "raven-js": "^3.17.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
@@ -32,12 +32,12 @@
   "devDependencies": {
     "bs-platform": "^1.8.2",
     "chalk": "^2.1.0",
-    "electron": "^1.7.6",
-    "electron-builder": "^19.22.2",
+    "electron": "^1.7.5",
+    "electron-builder": "^19.22.1",
     "figlet": "^1.2.0",
     "reason-react": "^0.2.3",
-    "release": "^1.4.0",
-    "webpack": "^3.5.4",
+    "release": "^1.4.3",
+    "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1",
     "write-file-webpack-plugin": "^4.1.0"
   },
@@ -45,7 +45,12 @@
     "appId": "com.mike-engel.barnacal",
     "productName": "Barnacal",
     "compression": "maximum",
-    "files": ["Design/icons/**/*", "public/main.js", "index.js", "index.html"],
+    "files": [
+      "Design/icons/**/*",
+      "public/main.js",
+      "index.js",
+      "index.html"
+    ],
     "mac": {
       "icon": "Design/icons/app/AppIcon.icns"
     },
