@@ -36,7 +36,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e0eac171362791e5e16d"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a245e2c7fa5ceea698fb"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -25821,6 +25821,7 @@ var React       = __webpack_require__(21);
 var Header      = __webpack_require__(243);
 var Popover     = __webpack_require__(256);
 var Calendar    = __webpack_require__(257);
+var Electron    = __webpack_require__(241);
 var ReasonReact = __webpack_require__(19);
 var Add_months  = __webpack_require__(128);
 var Sub_months  = __webpack_require__(275);
@@ -25858,9 +25859,12 @@ function resetDate(_, _$1) {
 
 function make() {
   var newrecord = component.slice();
+  newrecord[/* didMount */4] = (function (self) {
+      Electron.ipcRenderer.on("background-update", Curry._1(self[/* update */2], resetDate));
+      return /* NoUpdate */0;
+    });
   newrecord[/* render */9] = (function (self) {
       var date = self[/* state */3];
-      document.addEventListener("visibilitychange", Curry._1(self[/* update */2], resetDate));
       return React.createElement("div", {
                   style: container_styles
                 }, ReasonReact.element(/* None */0, /* None */0, Popover.make(/* array */[
@@ -28710,6 +28714,8 @@ var Start_of_month_unsafe = __webpack_require__(262);
 
 var PackageJSON = /* module */[];
 
+var Electron = /* module */[];
+
 var Raven = /* module */[];
 
 var Process = /* module */[];
@@ -28730,6 +28736,7 @@ var DateFns = /* module */[
 ];
 
 exports.PackageJSON = PackageJSON;
+exports.Electron    = Electron;
 exports.Raven       = Raven;
 exports.Process     = Process;
 exports.DOM         = DOM;
@@ -44246,7 +44253,7 @@ module.exports = ReactDOMInvalidARIAHook;
 /* 369 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"barnacal","version":"0.3.2","description":"A simple menu bar app for viewing a calendar","main":"index.js","scripts":{"build":"npm run build:bsb;npm run build:webpack","build:bsb":"bsb -make-world","build:webpack":"NODE_ENV=production webpack -p","clean":"npm run clean:bsb;npm run clean:webpack","clean:bsb":"bsb -clean-world","clean:project":"rm -rf public/main.js lib .merlin 'src/**/*.js' dist","dist":"npm run clean:project; npm run build; electron-builder -mwl","pack":"npm run clean:project; npm run build; electron-builder -mwl --dir","start":"node scripts/startDev.js","start:bsb":"npm run build:bsb -- -w","start:webpack":"node scripts/webpackDevServer.js","start:electron":"electron .","watch:electron":"watchexec -r -s SIGKILL -f 'index.js' -f 'index.dev.html' npm run start:electron"},"author":"Mike Engel <mike@mike-engel.com>","license":"UNLICENSED","dependencies":{"date-fns":"^1.28.5","electron-is-dev":"^0.3.0","first-run":"^1.2.0","raven":"^2.1.2","raven-js":"^3.17.0","react":"^15.6.1","react-dom":"^15.6.1"},"devDependencies":{"bs-platform":"^1.8.2","chalk":"^2.1.0","electron":"^1.7.5","electron-builder":"^19.22.1","figlet":"^1.2.0","reason-react":"^0.2.3","release":"^1.4.3","webpack":"^3.5.5","webpack-dev-server":"^2.7.1","write-file-webpack-plugin":"^4.1.0"},"build":{"appId":"com.mike-engel.barnacal","productName":"Barnacal","compression":"maximum","files":["Design/icons/**/*","public/main.js","index.js","index.html"],"mac":{"icon":"Design/icons/app/AppIcon.icns"},"win":{"icon":"Design/icons/app/AppIcon.ico"},"linux":{"category":"Utility"}}}
+module.exports = {"name":"barnacal","version":"0.3.3","description":"A simple menu bar app for viewing a calendar","main":"index.js","scripts":{"build":"npm run build:bsb;npm run build:webpack","build:bsb":"bsb -make-world","build:webpack":"NODE_ENV=production webpack -p","clean":"npm run clean:bsb;npm run clean:webpack","clean:bsb":"bsb -clean-world","clean:project":"rm -rf public/main.js lib .merlin 'src/**/*.js' dist","dist":"npm run clean:project; npm run build; electron-builder -mwl","pack":"npm run clean:project; npm run build; electron-builder -mwl --dir","start":"node scripts/startDev.js","start:bsb":"npm run build:bsb -- -w","start:webpack":"node scripts/webpackDevServer.js","start:electron":"electron .","watch:electron":"watchexec -r -s SIGKILL -f 'index.js' -f 'index.dev.html' npm run start:electron"},"author":"Mike Engel <mike@mike-engel.com>","license":"UNLICENSED","dependencies":{"date-fns":"^1.28.5","electron-is-dev":"^0.3.0","first-run":"^1.2.0","raven":"^2.1.2","raven-js":"^3.17.0","react":"^15.6.1","react-dom":"^15.6.1"},"devDependencies":{"bs-platform":"^1.8.2","chalk":"^2.1.0","electron":"^1.7.5","electron-builder":"^19.22.1","figlet":"^1.2.0","reason-react":"^0.2.3","release":"^1.4.3","webpack":"^3.5.5","webpack-dev-server":"^2.7.1","write-file-webpack-plugin":"^4.1.0"},"build":{"appId":"com.mike-engel.barnacal","productName":"Barnacal","compression":"maximum","files":["Design/icons/**/*","public/main.js","index.js","index.html"],"mac":{"icon":"Design/icons/app/AppIcon.icns"},"win":{"icon":"Design/icons/app/AppIcon.ico"},"linux":{"category":"Utility"}}}
 
 /***/ })
 /******/ ]);

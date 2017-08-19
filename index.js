@@ -46,7 +46,7 @@ const quitApp = (app, interval) => () => {
   app.exit();
 };
 
-const openTray = (window, tray) => () => {
+const toggleTray = (window, tray) => () => {
   const { screen } = electron;
   const trayBounds = tray.getBounds();
   const windowSize = window.getSize();
@@ -80,7 +80,11 @@ const openTray = (window, tray) => () => {
   }
 
   window.setPosition(horizontalPosition, verticalPosition);
-  window.isVisible() ? window.hide() : window.show();
+  if (window.isVisible()) {
+    window.hide();
+  } else {
+    window.show();
+  }
 };
 
 app.on("ready", function() {
@@ -90,19 +94,23 @@ app.on("ready", function() {
 
   trayIcon = new Tray(iconPath);
 
-  // update the icon every day
-  const iconUpdateInterval = setInterval(() => {
-    trayIcon.setImage(path.join(__dirname, getTrayIconName()));
-  }, 60000);
-
   let window = new BrowserWindow({
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     resizable: false,
     frame: false,
     transparent: true,
-    show: false
+    show: false,
+    webPreferences: {
+      backgroundThrottling: false
+    }
   });
+
+  // update the icon every day
+  const iconUpdateInterval = setInterval(() => {
+    trayIcon.setImage(path.join(__dirname, getTrayIconName()));
+    if (!window.isVisible()) window.webContents.send("background-update");
+  }, 60000);
 
   if (process.platform === "darwin") app.dock.hide();
 
@@ -114,18 +122,26 @@ app.on("ready", function() {
 
   window.on("blur", function() {
     window.hide();
+    window.webContents.send("background-update");
   });
 
-  const openTrayWithContext = openTray(window, trayIcon);
+  const toggleTrayWithContext = toggleTray(window, trayIcon);
   const quitAppWithContext = quitApp(app, iconUpdateInterval);
 
   trayIcon.setToolTip("Barnacal");
 
-  trayIcon.on("click", openTrayWithContext);
-  trayIcon.on("double-click", openTrayWithContext);
-  trayIcon.on("right-click", openTrayWithContext);
+  trayIcon.on("click", toggleTrayWithContext);
+  trayIcon.on("double-click", toggleTrayWithContext);
+  trayIcon.on("right-click", () => {
+    menu.popup(window);
+  });
 
-  menu.append(new MenuItem({ label: "Quit", click: quitAppWithContext }));
+  menu.append(
+    new MenuItem({
+      label: "Quit",
+      click: quitAppWithContext
+    })
+  );
 
   ipcMain.on("show-config-menu", evt => {
     menu.popup(window);

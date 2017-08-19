@@ -25,9 +25,12 @@ let resetDate _evt _self => ReasonReact.Update (Js.Date.now ());
 let make _children => {
   ...component,
   initialState: fun () => Js.Date.now (),
+  didMount: fun self => {
+    FFI.Electron.on "background-update" (self.ReasonReact.update resetDate);
+    ReasonReact.NoUpdate
+  },
   render: fun self => {
     let date = self.state;
-    FFI.DOM.add_event_listener "visibilitychange" (self.ReasonReact.update resetDate);
     <div style=container_styles>
       <Popover>
         <Header self date onNextMonth onLastMonth resetDate />

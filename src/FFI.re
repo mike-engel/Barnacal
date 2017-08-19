@@ -2,6 +2,12 @@ module PackageJSON = {
   external version : string = "version" [@@bs.module ("../../../package.json", "packageJSON")];
 };
 
+module Electron = {
+  external send : string => unit = "" [@@bs.scope "ipcRenderer"] [@@bs.module "electron"];
+  external on : string => ('t => unit) => unit =
+    "" [@@bs.scope "ipcRenderer"] [@@bs.module "electron"];
+};
+
 module Raven = {
   type raven;
   type raven_options = {. release : string};

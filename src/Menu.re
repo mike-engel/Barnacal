@@ -1,6 +1,4 @@
-external send : string => unit = "" [@@bs.scope "ipcRenderer"] [@@bs.module "electron"];
-
-let quit_app _evt => send "quit-app";
+let quit_app _evt => FFI.Electron.send "quit-app";
 
 let menu_styles =
   ReactDOMRe.Style.make
