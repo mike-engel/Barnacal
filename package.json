@@ -1,6 +1,6 @@
 {
   "name": "barnacal",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A simple menu bar app for viewing a calendar",
   "main": "index.js",
   "scripts": {
@@ -65,11 +65,17 @@
       "target": [
         {
           "target": "deb",
-          "arch": ["ia32", "x64"]
+          "arch": [
+            "ia32",
+            "x64"
+          ]
         },
         {
           "target": "AppImage",
-          "arch": ["ia32", "x64"]
+          "arch": [
+            "ia32",
+            "x64"
+          ]
         }
       ]
     }
