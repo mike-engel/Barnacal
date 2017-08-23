@@ -20,9 +20,12 @@ const isWin = platform === "win32";
 
 if (!isDev) {
   raven
-    .config("https://f98d2418699d4fe9acac2e08621e31d0@sentry.io/204280", {
-      release: version
-    })
+    .config(
+      "https://f98d2418699d4fe9acac2e08621e31d0:f0dd6bacf1dc4560977c18ac28f57b15@sentry.io/204280",
+      {
+        release: version
+      }
+    )
     .install();
 }
 

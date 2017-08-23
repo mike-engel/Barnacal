@@ -64,10 +64,6 @@
         {
           "target": "AppImage",
           "arch": ["ia32", "x64"]
-        },
-        {
-          "target": "rpm",
-          "arch": ["ia32", "x64"]
         }
       ]
     }
