@@ -51,7 +51,8 @@
       "Design/icons/**/*",
       "public/main.js",
       "index.js",
-      "index.html"
+      "index.html",
+      "auto-updater.js"
     ],
     "mac": {
       "icon": "Design/icons/app/AppIcon.icns"
@@ -64,10 +65,7 @@
       "target": [
         {
           "target": "deb",
-          "arch": [
-            "ia32",
-            "x64"
-          ]
+          "arch": ["ia32", "x64"]
         },
         {
           "target": "AppImage",
