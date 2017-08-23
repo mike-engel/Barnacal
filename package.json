@@ -16,10 +16,10 @@
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
     "start:electron": "electron .",
-    "watch:electron": "watchexec -r -s SIGKILL -f index.js -f index.dev.html npm run start:electron"
+    "watch:electron": "watchexec -r -s SIGKILL -d -e js,html -i '*/lib/**' npm run start:electron"
   },
   "author": "Mike Engel <mike@mike-engel.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "date-fns": "^1.28.5",
     "electron-is-dev": "^0.3.0",
@@ -35,9 +35,10 @@
     "chalk": "^2.1.0",
     "electron": "^1.7.5",
     "electron-builder": "^19.22.1",
+    "electron-builder-squirrel-windows": "^19.24.0",
     "figlet": "^1.2.0",
     "reason-react": "^0.2.3",
-    "release": "^1.4.3",
+    "release": "^2.0.1",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1",
     "write-file-webpack-plugin": "^4.1.0"
@@ -46,12 +47,7 @@
     "appId": "com.mike-engel.barnacal",
     "productName": "Barnacal",
     "compression": "maximum",
-    "files": [
-      "Design/icons/**/*",
-      "public/main.js",
-      "index.js",
-      "index.html"
-    ],
+    "files": ["Design/icons/**/*", "public/main.js", "index.js", "index.html"],
     "mac": {
       "icon": "Design/icons/app/AppIcon.icns"
     },
@@ -59,7 +55,21 @@
       "icon": "Design/icons/app/AppIcon.ico"
     },
     "linux": {
-      "category": "Utility"
+      "category": "Utility",
+      "target": [
+        {
+          "target": "deb",
+          "arch": ["ia32", "x64"]
+        },
+        {
+          "target": "AppImage",
+          "arch": ["ia32", "x64"]
+        },
+        {
+          "target": "rpm",
+          "arch": ["ia32", "x64"]
+        }
+      ]
     }
   }
 }

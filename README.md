@@ -3,15 +3,17 @@
 
 # Installation
 
-WIP
+To install Barnacal on your system, visit the [Releases](https://github.com/mike-engel/barnacal/releases) page. From there you can download the binary for your system. If your system isn't supported, consider opening an issue or pull request to add support for it.
 
 # Developing
 
-This a Node.js project at heart, so begin by installing the npm dependencies (npm 5 preferred).
+This a Node.js project at heart, so begin by installing the npm dependencies (npm 5 preferred). This may take a while if `bs-platform` needs to compile for your system.
 
 ```sh
 npm i
 ```
+
+You'll want to also install [`reason-cli`](https://github.com/reasonml/reason-cli#install), which gets your better error messages and dev tools. This project relies on it for development.
 
 To start `bsb` and `webpack` at the same time, run `npm start` in a terminal window. This will automatically watch and compile changes to your reason files and hot reload them into the electron app.
 
@@ -38,6 +40,14 @@ brew install watchexec
 npm run watch:electron
 ```
 
-# License
+# Contributing
 
-Unlicensed, for now.
+Issues and Pull requests are both welcomed! Prettier is enabled by default as a pre-commit hook, but feel free to add it to your editor.
+
+# [Code of Conduct](CODE_OF_CONDUCT.md)
+
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
+
+# [Changelog](https://github.com/mike-engel/barnacal/releases)
+
+# [License](LICENSE.md)
