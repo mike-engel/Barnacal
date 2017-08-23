@@ -1,6 +1,10 @@
 # Barnacal
 > A simple menu bar app for viewing a calendar
 
+<a href="screenshot.png" target="_blank" style="text-align:center;display:block;">
+  <img src="screenshot.png" alt="Screenshot of Barnacal" style="width:412px;max-width:100%;">
+</a>
+
 # Installation
 
 To install Barnacal on your system, visit the [Releases](https://github.com/mike-engel/barnacal/releases) page. From there you can download the binary for your system. If your system isn't supported, consider opening an issue or pull request to add support for it.
