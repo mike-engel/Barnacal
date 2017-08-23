@@ -6,9 +6,11 @@ const { platform } = require("os");
 const isDev = require("electron-is-dev");
 const raven = require("raven");
 const { version } = require("./package.json");
+const autoUpdater = require("./auto-updater");
+const ms = require("ms");
 
 const BrowserWindow = electron.BrowserWindow;
-const { app, ipcMain, Menu, MenuItem, Tray } = electron;
+const { app, ipcMain, Menu, MenuItem, Tray, Notification } = electron;
 const TRAY_ARROW_HEIGHT = 50;
 const WINDOW_WIDTH = 300;
 const WINDOW_HEIGHT = 300;
@@ -18,12 +20,9 @@ const isWin = platform === "win32";
 
 if (!isDev) {
   raven
-    .config(
-      "https://dae4fe8d64c34c7fb75319d6394f1a11:b3220cb1e0dc421b9f7f6cc8ab56b5b7@sentry.io/204280",
-      {
-        release: version
-      }
-    )
+    .config("https://f98d2418699d4fe9acac2e08621e31d0@sentry.io/204280", {
+      release: version
+    })
     .install();
 }
 
@@ -89,10 +88,11 @@ const toggleTray = (window, tray) => () => {
 
 app.on("ready", function() {
   const menu = new Menu();
-  const iconPath = path.join(__dirname, getTrayIconName());
+  const menuIconPath = path.join(__dirname, getTrayIconName());
+  const appIconPath = path.join(__dirname, "Design/icons/app/AppIcon.png");
   const htmlPath = `file://${__dirname}/index${isDev ? ".dev" : ""}.html`;
 
-  trayIcon = new Tray(iconPath);
+  trayIcon = new Tray(menuIconPath);
 
   let window = new BrowserWindow({
     width: WINDOW_WIDTH,
@@ -110,11 +110,14 @@ app.on("ready", function() {
   const iconUpdateInterval = setInterval(() => {
     trayIcon.setImage(path.join(__dirname, getTrayIconName()));
     if (!window.isVisible()) window.webContents.send("background-update");
-  }, 60000);
+  }, ms("1m"));
 
   if (process.platform === "darwin") app.dock.hide();
 
   window.loadURL(htmlPath);
+
+  // configure the auto updater, only in prod
+  if (!isDev) autoUpdater(window);
 
   window.on("close", function() {
     window = null;

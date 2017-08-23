@@ -1,14 +1,21 @@
 let quit_app _evt => FFI.Electron.send "quit-app";
 
+let update_app _evt => FFI.Electron.send "install-update";
+
 let menu_styles =
   ReactDOMRe.Style.make
-    position::"absolute"
+    position::"relative"
+    display::"flex"
+    alignItems::"center"
+    justifyContent::"space-between"
     bottom::"0"
     height::"26px"
     width::"100%"
     borderBottomRightRadius::"5px"
     borderBottomLeftRadius::"5px"
     textAlign::"right"
+    padding::"0 1em"
+    marginBottom::"0.5em"
     ();
 
 let config_styles =
@@ -16,10 +23,14 @@ let config_styles =
     display::"inline-block"
     height::"15px"
     width::"14px"
-    marginRight::"10px"
     textDecoration::"none"
     cursor::"default"
     ();
+
+let update_styles = ReactDOMRe.Style.make color::"#FFF" fontSize::"12px" ();
+
+let link_styles =
+  ReactDOMRe.Style.make color::"#F012BE" fontSize::"12px" textDecoration::"none" ();
 
 let component = ReasonReact.statelessComponent "Menu";
 
@@ -36,8 +47,21 @@ let cog =
     </g>
   </svg>;
 
-let make _children => {
+let make ::update_available _children => {
   ...component,
-  render: fun _self =>
-    <div style=menu_styles> <a style=config_styles href="#" onClick=quit_app> cog </a> </div>
+  render: fun _self => {
+    let update_el =
+      update_available ?
+        <span style=update_styles>
+          (ReasonReact.stringToElement "An update is available. ")
+          <a style=link_styles href="#" onClick=update_app>
+            (ReasonReact.stringToElement "Install now")
+          </a>
+        </span> :
+        ReasonReact.stringToElement "";
+    <div style=menu_styles>
+      <span style=update_styles> update_el </span>
+      <a style=config_styles href="#" onClick=quit_app> cog </a>
+    </div>
+  }
 };

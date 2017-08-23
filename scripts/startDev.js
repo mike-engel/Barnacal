@@ -95,7 +95,7 @@ berror.stdout.on("data", data => {
 });
 
 compileEmitter.on("log", () => {
-  figlet("Barnacle", { font: "Slant" }, (err, data) => {
+  figlet("Barnacal", { font: "Slant" }, (err, data) => {
     clearConsole();
     process.stdout.write(chalk.cyan(data));
     process.stdout.write("\n\n");

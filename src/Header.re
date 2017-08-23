@@ -26,7 +26,7 @@ let header_text_styles =
 let navigation_styles =
   ReactDOMRe.Style.make textDecoration::"none" color::"#FFF" fontSize::"1.2rem" width::"50px" ();
 
-let make ::self ::date ::onNextMonth ::onLastMonth ::resetDate _children => {
+let make ::update ::date ::onNextMonth ::onLastMonth ::resetDate _children => {
   ...component,
   render: fun _self => {
     let current_month = FFI.DateFns.format_date date "MMMM YYYY";
@@ -35,16 +35,16 @@ let make ::self ::date ::onNextMonth ::onLastMonth ::resetDate _children => {
         href="#"
         style=navigation_styles
         dangerouslySetInnerHTML={"__html": "&larr;"}
-        onClick=(self.ReasonReact.update onLastMonth)
+        onClick=(update onLastMonth)
       />
-      <h1 style=header_text_styles onClick=(self.ReasonReact.update resetDate)>
+      <h1 style=header_text_styles onClick=(update resetDate)>
         (ReasonReact.stringToElement current_month)
       </h1>
       <a
         href="#"
         style=navigation_styles
         dangerouslySetInnerHTML={"__html": "&rarr;"}
-        onClick=(self.ReasonReact.update onNextMonth)
+        onClick=(update onNextMonth)
       />
     </div>
   }

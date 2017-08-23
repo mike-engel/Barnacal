@@ -3,7 +3,7 @@ let component = ReasonReact.statelessComponent "Popover";
 let popover_styles =
   ReactDOMRe.Style.make
     borderRadius::"5px"
-    height::"280px"
+    height::"auto"
     width::"300px"
     padding::"0"
     backgroundColor::"#000"
@@ -11,6 +11,7 @@ let popover_styles =
     marginTop::"10px"
     position::"relative"
     cursor::"default"
+    paddingBottom::"1px"
     ();
 
 let make children => {
