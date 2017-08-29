@@ -11,7 +11,6 @@ const executionProgram = "npm";
 
 const bsb = spawn(`${executionProgram}`, ["run", "start:bsb"]);
 const webpack = spawn(`${executionProgram}`, ["run", "start:webpack"]);
-const berror = spawn("berror", ["--path-to-refmttype", "refmttype"]);
 
 const compileStatus = {
   bsb: {
@@ -30,45 +29,9 @@ function clearConsole() {
   );
 }
 
-clearConsole();
-
-process.stdout.write(chalk.cyan("Hang tight! Starting your app..."));
-
-bsb.stdout.on("data", data => {
-  berror.stdin.write(data);
-});
-
-bsb.stderr.on("data", data => {
-  berror.stdin.write(data);
-});
-
-webpack.stdout.on("data", data => {
+function handleBsbPipe(data) {
   const str = data.toString();
-  console.log(str);
-  if (str.includes("ERROR")) {
-    compileStatus.webpack = {
-      status: "error",
-      msg: str
-    };
-  } else if (str.includes("webpack: Compiled successfully")) {
-    compileStatus.webpack = { status: "success", msg: "OK" };
-  } else {
-    if (str.includes("webpack: Failed to compile")) {
-      return;
-    }
-    compileStatus.webpack = { status: "compiling", msg: "OK" };
-  }
-  compileEmitter.emit("log");
-});
-
-webpack.stderr.on("data", data => {
-  console.log(data.toString());
-  process.exit(1);
-});
-
-berror.stdout.on("data", data => {
-  const str = data.toString();
-  if (str.includes(".re:")) {
+  if (str.includes("We've found a bug for you") || str.includes("Warning")) {
     compileStatus.bsb = {
       status: "error",
       msg: str
@@ -92,6 +55,42 @@ berror.stdout.on("data", data => {
     };
   }
   compileEmitter.emit("log");
+}
+
+clearConsole();
+
+process.stdout.write(chalk.cyan("Hang tight! Starting your app..."));
+
+bsb.stdout.on("data", data => {
+  handleBsbPipe(data);
+});
+
+bsb.stderr.on("data", data => {
+  handleBsbPipe(data);
+});
+
+webpack.stdout.on("data", data => {
+  const str = data.toString();
+  console.log(str);
+  if (str.includes("ERROR")) {
+    compileStatus.webpack = {
+      status: "error",
+      msg: str
+    };
+  } else if (str.includes("webpack: Compiled successfully")) {
+    compileStatus.webpack = { status: "success", msg: "OK" };
+  } else {
+    if (str.includes("webpack: Failed to compile")) {
+      return;
+    }
+    compileStatus.webpack = { status: "compiling", msg: "OK" };
+  }
+  compileEmitter.emit("log");
+});
+
+webpack.stderr.on("data", data => {
+  console.error(data.toString());
+  process.exit(1);
 });
 
 compileEmitter.on("log", () => {

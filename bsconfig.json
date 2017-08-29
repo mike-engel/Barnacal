@@ -4,5 +4,9 @@
     "react-jsx": 2
   },
   "bs-dependencies": ["reason-react"],
-  "sources": ["src"]
+  "sources": ["src"],
+  "package-specs": {
+    "module": "es6"
+  },
+  "bsc-flags": ["-bs-super-errors"]
 }
