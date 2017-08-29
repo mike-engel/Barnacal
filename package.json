@@ -1,6 +1,6 @@
 {
   "name": "barnacal",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "A simple menu bar app for viewing a calendar",
   "main": "index.js",
   "scripts": {
