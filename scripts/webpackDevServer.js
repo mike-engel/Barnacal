@@ -1,7 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const WebpackDevServer = require("webpack-dev-server");
-const config = require("../webpack.config.js");
+const config = require("../webpack.dev.js");
 const defaultPort = 8080;
 const compiler = webpack(config);
 
@@ -24,11 +24,11 @@ const server = new WebpackDevServer(compiler, {
 try {
   server.listen(PORT);
 } catch (e) {
-  console.log(e);
+  console.error(e);
   process.exit(1);
 }
 
-["SIGINT", "SIGTERM"].forEach(sig => {
+["SIGINT", "SIGTERM", "exit"].forEach(sig => {
   process.on(sig, () => {
     server.close();
     process.exit();
