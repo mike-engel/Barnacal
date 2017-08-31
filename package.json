@@ -7,7 +7,7 @@
     "build": "npm run build:bsb;npm run build:webpack",
     "build:bsb": "bsb -make-world",
     "build:webpack": "NODE_ENV=production webpack -p --config webpack.prod.js",
-    "clean": "npm run clean:bsb;npm run clean:webpack",
+    "clean": "npm run clean:bsb;npm run clean:project",
     "clean:bsb": "bsb -clean-world",
     "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js' dist",
     "dist": "npm run clean:project; npm run build; electron-builder -mwl",
@@ -70,17 +70,11 @@
       "target": [
         {
           "target": "deb",
-          "arch": [
-            "ia32",
-            "x64"
-          ]
+          "arch": ["ia32", "x64"]
         },
         {
           "target": "AppImage",
-          "arch": [
-            "ia32",
-            "x64"
-          ]
+          "arch": ["ia32", "x64"]
         }
       ]
     }

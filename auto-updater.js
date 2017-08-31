@@ -32,24 +32,40 @@ const init = () => {
   isInitialized = true;
 };
 
-const onUpdate = window => (evt, releaseNotes, releaseName) => {
-  const notification = new Notification({
-    title: "Barnacal update available",
-    body: "An update for Barnacal is available. Click to apply the update."
-  });
+const onUpdate = (window, evt, releaseNotes, releaseName) => {
+  if (Notification.isSupported()) {
+    const notification = new Notification({
+      title: "Barnacal update available",
+      body: `Barnacal ${releaseName} is ready to install. Click to apply the update.`
+    });
 
-  window.webContents.emit("update-available", { releaseNotes, releaseName });
+    notification.show();
 
-  notification.on("click", autoUpdater.quitAndInstall);
+    notification.on("click", autoUpdater.quitAndInstall);
+  }
+
+  window.webContents.send("update-ready", { releaseNotes, releaseName });
 };
 
 module.exports = window => {
   if (!isInitialized) init();
 
-  autoUpdater.on("update-downloaded", onUpdate);
-  ipcMain.on("install-update", () => {
-    autoUpdater.quitAndInstall;
+  autoUpdater.on("checking-for-update", () => {
+    window.webContents.send("checking-for-updates");
   });
 
-  window.on("close", () => autoUpdater.removeAllListeners());
+  autoUpdater.on("update-available", () => {
+    window.webContents.send("update-available");
+  });
+
+  autoUpdater.on("update-downloaded", (evt, releaseNotes, releaseName) => {
+    window.webContents.send("update-downloaded");
+    onUpdate(window, evt, releaseNotes, releaseName);
+  });
+
+  ipcMain.on("install-update", () => {
+    autoUpdater.quitAndInstall();
+  });
+
+  window.on("close", autoUpdater.removeAllListeners);
 };

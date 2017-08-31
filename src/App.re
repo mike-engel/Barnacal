@@ -38,7 +38,7 @@ let make _children => {
   initialState: fun () => {date: Js.Date.now (), updateAvailable: false},
   didMount: fun {ReasonReact.update: update} => {
     FFI.Electron.on "background-update" (update resetDate);
-    FFI.Electron.on "update-available" (update updateAvailable);
+    FFI.Electron.on "update-ready" (update updateAvailable);
     ReasonReact.NoUpdate
   },
   render: fun {state, update} => {

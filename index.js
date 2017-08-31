@@ -4,7 +4,7 @@ const getDate = require("date-fns/get_date");
 const firstRun = require("first-run");
 const { platform } = require("os");
 const isDev = require("electron-is-dev");
-const raven = require("raven");
+const Raven = require("raven");
 const { version } = require("./package.json");
 const autoUpdater = require("./auto-updater");
 const ms = require("ms");
@@ -19,14 +19,12 @@ const VERT_PADDING = 15;
 const isWin = platform === "win32";
 
 if (!isDev) {
-  raven
-    .config(
-      "https://f98d2418699d4fe9acac2e08621e31d0:f0dd6bacf1dc4560977c18ac28f57b15@sentry.io/204280",
-      {
-        release: version
-      }
-    )
-    .install();
+  Raven.config(
+    "https://f98d2418699d4fe9acac2e08621e31d0:f0dd6bacf1dc4560977c18ac28f57b15@sentry.io/204280",
+    {
+      release: version
+    }
+  ).install();
 }
 
 // prevent garbage collection & icon from dissapearing
@@ -107,6 +105,14 @@ app.on("ready", function() {
     webPreferences: {
       backgroundThrottling: false
     }
+  });
+
+  window.webContents.on("crashed", err => {
+    if (!isDev) Raven.captureException(err);
+  });
+
+  window.on("unresponsive", err => {
+    if (!isDev) Raven.captureException(err);
   });
 
   // update the icon every day
