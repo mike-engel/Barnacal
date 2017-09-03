@@ -12,6 +12,8 @@
     "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js' dist",
     "dist": "npm run clean:project; npm run build; electron-builder -mwl",
     "pack": "npm run clean:project; npm run build; electron-builder -mwl --dir",
+    "test": "mocha --recursive test/**/*.test.js",
+    "test:coverage": "nyc --reporter=text --reporter=html npm run test",
     "start": "node scripts/startDev.js",
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
@@ -34,14 +36,19 @@
   },
   "devDependencies": {
     "bs-platform": "^1.9.1",
+    "chai": "^4.1.1",
     "chalk": "^2.1.0",
     "clean-webpack-plugin": "^0.1.16",
     "electron": "^1.7.5",
     "electron-builder": "^19.24.1",
     "electron-builder-squirrel-windows": "^19.25.0",
     "figlet": "^1.2.0",
+    "mocha": "^3.5.0",
+    "nyc": "^11.1.0",
+    "proxyquire": "^1.8.0",
     "reason-react": "^0.2.3",
     "release": "^2.1.0",
+    "sinon": "^3.2.1",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1",
@@ -70,19 +77,16 @@
       "target": [
         {
           "target": "deb",
-          "arch": [
-            "ia32",
-            "x64"
-          ]
+          "arch": ["ia32", "x64"]
         },
         {
           "target": "AppImage",
-          "arch": [
-            "ia32",
-            "x64"
-          ]
+          "arch": ["ia32", "x64"]
         }
       ]
     }
+  },
+  "nyc": {
+    "check-coverage": true
   }
 }

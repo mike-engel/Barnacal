@@ -1,10 +1,10 @@
-const { autoUpdater, Notification, ipcMain } = require("electron");
+const { autoUpdater, ipcMain, Notification } = require("electron");
+const isDev = require("electron-is-dev");
+const ms = require("ms");
 const Raven = require("raven");
 const { version } = require("./package");
-const ms = require("ms");
-const isDev = require("electron-is-dev");
+const { platform } = require("os");
 
-const { platform } = process;
 const updateHost = "https://barnacal-updates.now.sh";
 
 let isInitialized = false;
@@ -50,14 +50,6 @@ const onUpdate = (window, evt, releaseNotes, releaseName) => {
 module.exports = window => {
   if (!isInitialized) init();
 
-  autoUpdater.on("checking-for-update", () => {
-    window.webContents.send("checking-for-updates");
-  });
-
-  autoUpdater.on("update-available", () => {
-    window.webContents.send("update-available");
-  });
-
   autoUpdater.on("update-downloaded", (evt, releaseNotes, releaseName) => {
     window.webContents.send("update-downloaded");
     onUpdate(window, evt, releaseNotes, releaseName);
@@ -69,3 +61,7 @@ module.exports = window => {
 
   window.on("close", autoUpdater.removeAllListeners);
 };
+
+module.exports.isInitialized = isInitialized;
+module.exports.init = init;
+module.exports.onUpdate = onUpdate;

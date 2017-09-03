@@ -5,6 +5,8 @@ node_modules
 bs
 public
 dist
+.nyc_output
+coverage
 
 .merlin
 
