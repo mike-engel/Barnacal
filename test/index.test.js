@@ -58,7 +58,7 @@ const {
   raven: ravenStub,
   "first-run": firstRunStub,
   "electron-is-dev": false,
-  os: { platform: "darwin" },
+  os: { platform: () => "darwin" },
   "is-online": sinon.stub().resolves(true),
   "./auto-updater": autoUpdaterStub
 });
@@ -122,7 +122,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": true,
-        os: { platform: "darwin" },
+        os: { platform: () => "darwin" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
@@ -138,7 +138,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": true,
-        os: { platform: "darwin" },
+        os: { platform: () => "darwin" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
@@ -154,7 +154,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub.returns(false),
         "electron-is-dev": false,
-        os: { platform: "darwin" },
+        os: { platform: () => "darwin" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
@@ -212,7 +212,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": true,
-        os: { platform: "darwin" },
+        os: { platform: () => "darwin" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
@@ -231,7 +231,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": false,
-        os: { platform: "darwin" },
+        os: { platform: () => "darwin" },
         "is-online": sinon.stub().rejects(false),
         "./auto-updater": autoUpdaterStub
       });
@@ -268,7 +268,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub.returns(false),
         "electron-is-dev": false,
-        os: { platform: "win32" },
+        os: { platform: () => "win32" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
@@ -422,7 +422,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": true,
-        os: { platform: "win32" },
+        os: { platform: () => "win32" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
@@ -449,7 +449,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": true,
-        os: { platform: "win32" },
+        os: { platform: () => "win32" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
@@ -633,7 +633,7 @@ describe("index", () => {
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": false,
-        os: { platform: "win32" },
+        os: { platform: () => "win32" },
         "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });

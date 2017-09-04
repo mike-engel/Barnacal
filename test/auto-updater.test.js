@@ -40,7 +40,7 @@ const autoUpdater = proxyquire("../auto-updater", {
   raven: ravenStub,
   "electron-is-dev": false,
   "is-online": sinon.stub().resolves(),
-  os: { platform: "darwin" }
+  os: { platform: () => "darwin" }
 });
 
 electronStub.Notification.isSupported = sinon.stub().returns(true);
@@ -145,7 +145,7 @@ describe("autoUpdater", () => {
         raven: ravenStub,
         "electron-is-dev": true,
         "is-online": sinon.stub().resolves(),
-        os: { platform: "darwin" }
+        os: { platform: () => "darwin" }
       });
 
       autoUpdaterDev.init();
@@ -164,7 +164,7 @@ describe("autoUpdater", () => {
         raven: ravenStub,
         "electron-is-dev": false,
         "is-online": sinon.stub().rejects(),
-        os: { platform: "darwin" }
+        os: { platform: () => "darwin" }
       });
 
       autoUpdaterDev.init();

@@ -18,7 +18,7 @@ const init = () => {
     if (!isDev) isOnline().then(() => Raven.captureException(err)).catch(noop);
   });
 
-  autoUpdater.setFeedURL(`${updateHost}/update/${platform}/${version}`);
+  autoUpdater.setFeedURL(`${updateHost}/update/${platform()}/${version}`);
 
   // Don't check immediately on start for windows
   setTimeout(() => {

@@ -25,7 +25,7 @@ const WINDOW_WIDTH = 300;
 const WINDOW_HEIGHT = 300;
 const HORIZ_PADDING = 15;
 const VERT_PADDING = 15;
-const isWin = platform === "win32";
+const isWin = platform() === "win32";
 
 // prevent garbage collection & icon from dissapearing
 let trayIcon = null;
@@ -154,7 +154,7 @@ const configureApp = () => {
   const iconUpdateInterval = configureTrayIcon(window, trayIcon, menu);
   const quitAppWithContext = quitApp(app, iconUpdateInterval);
 
-  if (platform === "darwin") app.dock.hide();
+  if (platform() === "darwin") app.dock.hide();
 
   menu.append(
     new MenuItem({
