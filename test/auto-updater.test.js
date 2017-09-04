@@ -39,6 +39,7 @@ const autoUpdater = proxyquire("../auto-updater", {
   electron: electronStub,
   raven: ravenStub,
   "electron-is-dev": false,
+  "is-online": sinon.stub().resolves(),
   os: { platform: "darwin" }
 });
 
@@ -122,22 +123,28 @@ describe("autoUpdater", () => {
   });
 
   describe("init", () => {
-    it("should handle autoupdater errors", () => {
+    it("should handle autoupdater errors", done => {
       autoUpdater.init();
 
       electronStub.autoUpdater.on.firstCall.args[1]("yolo", "test");
 
-      expect(electronStub.autoUpdater.on.calledOnce).to.be.true;
-      expect(electronStub.autoUpdater.on.firstCall.args[0]).to.equal("error");
-      expect(ravenStub.captureException.calledOnce).to.be.true;
-      expect(ravenStub.captureException.firstCall.args).to.deep.equal(["yolo"]);
+      setTimeout(() => {
+        expect(electronStub.autoUpdater.on.calledOnce).to.be.true;
+        expect(electronStub.autoUpdater.on.firstCall.args[0]).to.equal("error");
+        expect(ravenStub.captureException.calledOnce).to.be.true;
+        expect(ravenStub.captureException.firstCall.args).to.deep.equal([
+          "yolo"
+        ]);
+        done();
+      });
     });
 
-    it("should not report autoupdater errors to sentry in non-prod", () => {
+    it("should not report autoupdater errors to sentry in non-prod", done => {
       const autoUpdaterDev = proxyquire("../auto-updater", {
         electron: electronStub,
         raven: ravenStub,
         "electron-is-dev": true,
+        "is-online": sinon.stub().resolves(),
         os: { platform: "darwin" }
       });
 
@@ -145,7 +152,29 @@ describe("autoUpdater", () => {
 
       electronStub.autoUpdater.on.firstCall.args[1]("yolo", "test");
 
-      expect(ravenStub.captureException.called).to.be.false;
+      setTimeout(() => {
+        expect(ravenStub.captureException.called).to.be.false;
+        done();
+      });
+    });
+
+    it("should not report autoupdater errors to sentry if offline", done => {
+      const autoUpdaterDev = proxyquire("../auto-updater", {
+        electron: electronStub,
+        raven: ravenStub,
+        "electron-is-dev": false,
+        "is-online": sinon.stub().rejects(),
+        os: { platform: "darwin" }
+      });
+
+      autoUpdaterDev.init();
+
+      electronStub.autoUpdater.on.firstCall.args[1]("yolo", "test");
+
+      setTimeout(() => {
+        expect(ravenStub.captureException.called).to.be.false;
+        done();
+      });
     });
 
     it("should set the right feed url", () => {

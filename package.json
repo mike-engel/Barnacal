@@ -26,7 +26,9 @@
     "date-fns": "^1.28.5",
     "electron-is-dev": "^0.3.0",
     "first-run": "^1.2.0",
+    "is-online": "^7.0.0",
     "ms": "^2.0.0",
+    "noop2": "^2.0.0",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
     "raven": "^2.1.2",
@@ -36,17 +38,17 @@
   },
   "devDependencies": {
     "bs-platform": "^1.9.1",
-    "chai": "^4.1.1",
+    "chai": "^4.1.2",
     "chalk": "^2.1.0",
     "clean-webpack-plugin": "^0.1.16",
     "electron": "^1.7.5",
-    "electron-builder": "^19.24.1",
-    "electron-builder-squirrel-windows": "^19.25.0",
+    "electron-builder": "^19.27.3",
+    "electron-builder-squirrel-windows": "^19.27.3",
     "figlet": "^1.2.0",
     "mocha": "^3.5.0",
     "nyc": "^11.1.0",
     "proxyquire": "^1.8.0",
-    "reason-react": "^0.2.3",
+    "reason-react": "^0.2.4",
     "release": "^2.1.0",
     "sinon": "^3.2.1",
     "uglifyjs-webpack-plugin": "^0.4.6",
@@ -77,11 +79,17 @@
       "target": [
         {
           "target": "deb",
-          "arch": ["ia32", "x64"]
+          "arch": [
+            "ia32",
+            "x64"
+          ]
         },
         {
           "target": "AppImage",
-          "arch": ["ia32", "x64"]
+          "arch": [
+            "ia32",
+            "x64"
+          ]
         }
       ]
     }

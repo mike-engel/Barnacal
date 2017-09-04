@@ -3,7 +3,9 @@ const electron = require("electron");
 const firstRun = require("first-run");
 const getDate = require("date-fns/get_date");
 const isDev = require("electron-is-dev");
+const isOnline = require("is-online");
 const ms = require("ms");
+const noop = require("noop2");
 const path = require("path");
 const { platform } = require("os");
 const Raven = require("raven");
@@ -29,22 +31,6 @@ const isWin = platform === "win32";
 let trayIcon = null;
 let window = null;
 
-if (!isDev) {
-  Raven.config(
-    "https://f98d2418699d4fe9acac2e08621e31d0:f0dd6bacf1dc4560977c18ac28f57b15@sentry.io/204280",
-    {
-      release: version
-    }
-  ).install();
-}
-
-// set the app to open on login
-if (!isDev && firstRun()) {
-  app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true });
-}
-
-process.on("beforeExit", app.quit);
-
 const getTrayIconName = () =>
   `Design/icons/tray/BarnacalIcon${getDate(new Date())}Template@2x.png`;
 
@@ -54,7 +40,7 @@ const quitApp = (app, interval) => () => {
 };
 
 const reportToRaven = err => {
-  if (!isDev) Raven.captureException(err);
+  if (!isDev) isOnline().then(() => Raven.captureException(err)).catch(noop);
 };
 
 const getWindowPosition = (window, tray) => {
@@ -180,6 +166,22 @@ const configureApp = () => {
   ipcMain.on("show-config-menu", () => menu.popup(window));
   ipcMain.on("quit-app", quitAppWithContext);
 };
+
+if (!isDev) {
+  Raven.config(
+    "https://f98d2418699d4fe9acac2e08621e31d0:f0dd6bacf1dc4560977c18ac28f57b15@sentry.io/204280",
+    {
+      release: version
+    }
+  ).install();
+}
+
+// set the app to open on login
+if (!isDev && firstRun()) {
+  app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true });
+}
+
+process.on("beforeExit", app.quit);
 
 app.on("ready", configureApp);
 

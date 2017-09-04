@@ -1,6 +1,8 @@
 const { autoUpdater, ipcMain, Notification } = require("electron");
 const isDev = require("electron-is-dev");
+const isOnline = require("is-online");
 const ms = require("ms");
+const noop = require("noop2");
 const Raven = require("raven");
 const { version } = require("./package");
 const { platform } = require("os");
@@ -13,9 +15,7 @@ const init = () => {
   autoUpdater.on("error", (err, msg) => {
     console.error("Error checking for updates: ", msg, err.stack);
 
-    if (!isDev) {
-      Raven.captureException(err);
-    }
+    if (!isDev) isOnline().then(() => Raven.captureException(err)).catch(noop);
   });
 
   autoUpdater.setFeedURL(`${updateHost}/update/${platform}/${version}`);

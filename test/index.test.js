@@ -59,6 +59,7 @@ const {
   "first-run": firstRunStub,
   "electron-is-dev": false,
   os: { platform: "darwin" },
+  "is-online": sinon.stub().resolves(true),
   "./auto-updater": autoUpdaterStub
 });
 
@@ -122,6 +123,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: "darwin" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -137,6 +139,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: "darwin" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -152,6 +155,7 @@ describe("index", () => {
         "first-run": firstRunStub.returns(false),
         "electron-is-dev": false,
         os: { platform: "darwin" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -190,26 +194,54 @@ describe("index", () => {
   describe("reportToRaven", () => {
     const error = "YOLOERR";
 
-    it("should only capture the exception in prod", () => {
+    it("should only capture the exception in prod", done => {
       reportToRaven(error);
 
-      expect(ravenStub.captureException.calledOnce).to.be.true;
-      expect(ravenStub.captureException.firstCall.args).to.deep.equal([error]);
+      setTimeout(() => {
+        expect(ravenStub.captureException.calledOnce).to.be.true;
+        expect(ravenStub.captureException.firstCall.args).to.deep.equal([
+          error
+        ]);
+        done();
+      });
     });
 
-    it("should not capture the exception in non-prod", () => {
+    it("should not capture the exception in non-prod", done => {
       const { reportToRaven: reportToRavenDev } = proxyquire("../index", {
         electron: electronStub,
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: "darwin" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
       reportToRavenDev(error);
 
-      expect(ravenStub.captureException.called).to.be.false;
+      setTimeout(() => {
+        expect(ravenStub.captureException.called).to.be.false;
+        done();
+      });
+    });
+
+    it("should not capture the exception if offline", done => {
+      const { reportToRaven: reportToRavenDev } = proxyquire("../index", {
+        electron: electronStub,
+        raven: ravenStub,
+        "first-run": firstRunStub,
+        "electron-is-dev": false,
+        os: { platform: "darwin" },
+        "is-online": sinon.stub().rejects(false),
+        "./auto-updater": autoUpdaterStub
+      });
+
+      reportToRavenDev(error);
+
+      setTimeout(() => {
+        expect(ravenStub.captureException.called).to.be.false;
+        done();
+      });
     });
   });
 
@@ -237,6 +269,7 @@ describe("index", () => {
         "first-run": firstRunStub.returns(false),
         "electron-is-dev": false,
         os: { platform: "win32" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -390,6 +423,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: "win32" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -416,6 +450,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: "win32" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -599,6 +634,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": false,
         os: { platform: "win32" },
+        "is-online": sinon.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
