@@ -32,7 +32,7 @@ const init = () => {
   isInitialized = true;
 };
 
-const onUpdate = (window, evt, releaseNotes, releaseName) => {
+const onUpdate = (window, releaseNotes, releaseName) => {
   if (Notification.isSupported()) {
     const notification = new Notification({
       title: "Barnacal update available",
@@ -52,12 +52,10 @@ module.exports = window => {
 
   autoUpdater.on("update-downloaded", (evt, releaseNotes, releaseName) => {
     window.webContents.send("update-downloaded");
-    onUpdate(window, evt, releaseNotes, releaseName);
+    onUpdate(window, releaseNotes, releaseName);
   });
 
-  ipcMain.on("install-update", () => {
-    autoUpdater.quitAndInstall();
-  });
+  ipcMain.on("install-update", autoUpdater.quitAndInstall);
 
   window.on("close", autoUpdater.removeAllListeners);
 };
