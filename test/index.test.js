@@ -1,43 +1,47 @@
 const { getDate } = require("date-fns");
 const { expect } = require("chai");
 const sinon = require("sinon");
-const proxyquire = require("proxyquire").noCallThru().noPreserveCache();
+const proxyquire = require("proxyquire")
+  .noCallThru()
+  .noPreserveCache();
 const { version } = require("../package.json");
 const { resolve } = require("path");
+
+const testSandbox = sinon.createSandbox();
 
 sinon.spy(process, "on");
 
 const electronStub = {
   app: {
-    quit: sinon.stub(),
-    on: sinon.stub(),
-    exit: sinon.stub(),
+    quit: testSandbox.stub(),
+    on: testSandbox.stub(),
+    exit: testSandbox.stub(),
     setLoginItemSettings: sinon.stub(),
-    dock: { hide: sinon.stub() }
+    dock: { hide: testSandbox.stub() }
   },
   ipcMain: {
-    on: sinon.stub()
+    on: testSandbox.stub()
   },
-  Menu: sinon.stub(),
-  MenuItem: sinon.stub(),
-  Tray: sinon.stub(),
-  Notification: sinon.stub(),
-  BrowserWindow: sinon.stub(),
+  Menu: testSandbox.stub(),
+  MenuItem: testSandbox.stub(),
+  Tray: testSandbox.stub(),
+  Notification: testSandbox.stub(),
+  BrowserWindow: testSandbox.stub(),
   screen: {
-    getCursorScreenPoint: sinon.stub(),
-    getDisplayNearestPoint: sinon.stub()
+    getCursorScreenPoint: testSandbox.stub(),
+    getDisplayNearestPoint: testSandbox.stub()
   }
 };
 
 const ravenStub = {
-  config: sinon.stub().returnsThis(),
-  install: sinon.stub(),
-  captureException: sinon.stub()
+  config: testSandbox.stub().returnsThis(),
+  install: testSandbox.stub(),
+  captureException: testSandbox.stub()
 };
 
-const autoUpdaterStub = sinon.stub();
+const autoUpdaterStub = testSandbox.stub();
 
-const firstRunStub = sinon.stub().returns(true);
+const firstRunStub = testSandbox.stub().returns(true);
 
 const {
   getTrayIconName,
@@ -45,6 +49,8 @@ const {
   reportToRaven,
   getWindowPosition,
   toggleTray,
+  configureAboutWindow,
+  showAbout,
   configureWindow,
   configureTrayIcon,
   configureApp,
@@ -73,22 +79,7 @@ describe("index", () => {
   });
 
   afterEach(() => {
-    electronStub.app.quit.reset();
-    electronStub.app.on.reset();
-    electronStub.app.exit.reset();
-    electronStub.app.dock.hide.reset();
-    electronStub.ipcMain.on.reset();
-    electronStub.Menu.reset();
-    electronStub.MenuItem.reset();
-    electronStub.Tray.reset();
-    electronStub.Notification.reset();
-    electronStub.BrowserWindow.reset();
-
-    ravenStub.config.reset();
-    ravenStub.install.reset();
-    ravenStub.captureException.reset();
-
-    autoUpdaterStub.reset();
+    testSandbox.reset();
   });
 
   describe("startup", () => {
@@ -123,7 +114,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: () => "darwin" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -139,7 +130,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: () => "darwin" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -155,7 +146,7 @@ describe("index", () => {
         "first-run": firstRunStub.returns(false),
         "electron-is-dev": false,
         os: { platform: () => "darwin" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -177,7 +168,7 @@ describe("index", () => {
   describe("quitApp", () => {
     const interval = 1;
 
-    sinon.stub(global, "clearInterval");
+    testSandbox.stub(global, "clearInterval");
 
     afterEach(() => clearInterval.reset());
     after(() => clearInterval.restore());
@@ -213,7 +204,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: () => "darwin" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -232,7 +223,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": false,
         os: { platform: () => "darwin" },
-        "is-online": sinon.stub().rejects(false),
+        "is-online": testSandbox.stub().rejects(false),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -247,11 +238,16 @@ describe("index", () => {
 
   describe("getWindowPosition", () => {
     const trayStub = {
-      getBounds: sinon.stub().returns({ x: 500, width: 30 })
+      getBounds: testSandbox.stub()
     };
     const windowStub = {
-      getSize: sinon.stub().returns([WINDOW_WIDTH, WINDOW_HEIGHT])
+      getSize: testSandbox.stub()
     };
+
+    beforeEach(() => {
+      trayStub.getBounds.returns({ x: 500, width: 30 });
+      windowStub.getSize.returns([WINDOW_WIDTH, WINDOW_HEIGHT]);
+    });
 
     it("should return the x and y position", () => {
       const [x, y] = getWindowPosition(windowStub, trayStub);
@@ -269,7 +265,7 @@ describe("index", () => {
         "first-run": firstRunStub.returns(false),
         "electron-is-dev": false,
         os: { platform: () => "win32" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -293,29 +289,20 @@ describe("index", () => {
 
   describe("toggleTray", () => {
     const windowStub = {
-      setPosition: sinon.stub(),
-      isVisible: sinon.stub().returns(true),
-      getSize: sinon.stub().returns([1024, 768]),
-      hide: sinon.stub(),
-      show: sinon.stub()
+      setPosition: testSandbox.stub(),
+      isVisible: testSandbox.stub().returns(true),
+      getSize: testSandbox.stub().returns([1024, 768]),
+      hide: testSandbox.stub(),
+      show: testSandbox.stub()
     };
     const trayStub = {
-      getBounds: sinon.stub().returns({ x: 500, width: 30 })
+      getBounds: testSandbox.stub().returns({ x: 500, width: 30 })
     };
 
     beforeEach(() => {
       windowStub.isVisible.returns(true);
       windowStub.getSize.returns([1024, 768]);
       trayStub.getBounds.returns({ x: 500, width: 30 });
-    });
-
-    afterEach(() => {
-      windowStub.setPosition.reset();
-      windowStub.isVisible.reset();
-      windowStub.getSize.reset();
-      windowStub.hide.reset();
-      windowStub.show.reset();
-      trayStub.getBounds.reset();
     });
 
     it("should set the window position", () => {
@@ -344,22 +331,90 @@ describe("index", () => {
     });
   });
 
-  describe("configureWindow", () => {
+  describe("configureAboutWindow", () => {
     const windowStub = {
-      on: sinon.stub(),
-      webContents: { on: sinon.stub(), send: sinon.stub() },
-      loadURL: sinon.stub(),
-      hide: sinon.stub()
+      loadURL: testSandbox.stub()
     };
 
     beforeEach(() => {
       electronStub.BrowserWindow.returns(windowStub);
     });
 
-    afterEach(() => {
-      windowStub.on.reset();
-      windowStub.webContents.on.reset();
-      windowStub.loadURL.reset();
+    it("should create the browser window with the correct options", () => {
+      configureAboutWindow();
+
+      expect(electronStub.BrowserWindow.calledOnce).to.be.true;
+      expect(electronStub.BrowserWindow.firstCall.args).to.deep.equal([
+        {
+          width: WINDOW_WIDTH,
+          height: WINDOW_HEIGHT,
+          resizable: false,
+          frame: false,
+          transparent: false,
+          show: false,
+          title: "About Barnacal",
+          center: true,
+          fullscreenable: false,
+          maximizable: false,
+          minimizable: false,
+          titleBarStyle: "hidden-inset",
+          backgroundColor: "#000",
+          webPreferences: {
+            backgroundThrottling: false,
+            devTools: true
+          }
+        }
+      ]);
+    });
+
+    it("should load the url and return the window object", () => {
+      const result = configureAboutWindow();
+      const dir = resolve(__dirname, "..");
+
+      expect(windowStub.loadURL.calledOnce).to.be.true;
+      expect(windowStub.loadURL.firstCall.args).to.deep.equal([
+        `file://${dir}/about.html`
+      ]);
+      expect(result).to.deep.equal(windowStub);
+    });
+  });
+
+  describe("showAbout", () => {
+    it("should hide the window if it's already visible", () => {
+      const aboutWindowStub = {
+        isVisible: testSandbox.stub().returns(true),
+        hide: testSandbox.stub()
+      };
+
+      showAbout(aboutWindowStub)();
+
+      expect(aboutWindowStub.isVisible.calledOnce).to.be.true;
+      expect(aboutWindowStub.hide.calledOnce).to.be.true;
+    });
+
+    it("should show the window if it's already hidden", () => {
+      const aboutWindowStub = {
+        isVisible: testSandbox.stub().returns(false),
+        show: testSandbox.stub()
+      };
+
+      showAbout(aboutWindowStub)();
+
+      expect(aboutWindowStub.isVisible.calledOnce).to.be.true;
+      expect(aboutWindowStub.show.calledOnce).to.be.true;
+    });
+  });
+
+  describe("configureWindow", () => {
+    const windowStub = {
+      on: testSandbox.stub(),
+      webContents: { on: testSandbox.stub(), send: testSandbox.stub() },
+      loadURL: testSandbox.stub(),
+      hide: testSandbox.stub()
+    };
+
+    beforeEach(() => {
+      electronStub.BrowserWindow.returns(windowStub);
     });
 
     it("should create the browser window with the correct options", () => {
@@ -423,7 +478,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: () => "win32" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -443,14 +498,14 @@ describe("index", () => {
       expect(result).to.deep.equal(windowStub);
     });
 
-    it("should load the url and return the window object", () => {
+    it("should load the url and return the window object in dev", () => {
       const { configureWindow: configureWindowDev } = proxyquire("../index", {
         electron: electronStub,
         raven: ravenStub,
         "first-run": firstRunStub,
         "electron-is-dev": true,
         os: { platform: () => "win32" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 
@@ -467,31 +522,23 @@ describe("index", () => {
 
   describe("configureTrayIcon", () => {
     const windowStub = {
-      on: sinon.stub(),
-      webContents: { on: sinon.stub(), send: sinon.stub() },
-      loadURL: sinon.stub(),
-      hide: sinon.stub(),
-      isVisible: sinon.stub().returns(false)
+      on: testSandbox.stub(),
+      webContents: { on: testSandbox.stub(), send: testSandbox.stub() },
+      loadURL: testSandbox.stub(),
+      hide: testSandbox.stub(),
+      isVisible: testSandbox.stub().returns(false)
     };
     const trayStub = {
-      on: sinon.stub(),
-      setToolTip: sinon.stub(),
-      setImage: sinon.stub()
+      on: testSandbox.stub(),
+      setToolTip: testSandbox.stub(),
+      setImage: testSandbox.stub()
     };
     const menuStub = {
-      popup: sinon.stub()
+      popup: testSandbox.stub()
     };
 
     beforeEach(() => {
       electronStub.Tray.returns(trayStub);
-    });
-
-    afterEach(() => {
-      windowStub.webContents.send.reset();
-
-      trayStub.on.reset();
-      trayStub.setToolTip.reset();
-      trayStub.setImage.reset();
     });
 
     it("should create the browser window with the correct options", () => {
@@ -531,7 +578,7 @@ describe("index", () => {
     it("should check refresh the icon every minute", () => {
       const iconPath = resolve(__dirname, "..", getTrayIconName());
 
-      sinon.spy(global, "setInterval");
+      testSandbox.spy(global, "setInterval");
 
       configureTrayIcon(windowStub, null, menuStub);
 
@@ -549,7 +596,7 @@ describe("index", () => {
     });
 
     it("should not send a background update message if the window is visible", () => {
-      sinon.spy(global, "setInterval");
+      testSandbox.spy(global, "setInterval");
 
       windowStub.isVisible.returns(true);
 
@@ -565,18 +612,23 @@ describe("index", () => {
 
   describe("configure app", () => {
     const windowStub = {
-      on: sinon.stub(),
-      webContents: { on: sinon.stub(), send: sinon.stub() },
-      loadURL: sinon.stub(),
-      hide: sinon.stub()
+      on: testSandbox.stub(),
+      webContents: { on: testSandbox.stub(), send: testSandbox.stub() },
+      loadURL: testSandbox.stub(),
+      hide: testSandbox.stub(),
+      show: testSandbox.stub(),
+      isVisible: testSandbox.stub()
     };
     const trayStub = {
-      on: sinon.stub(),
-      setToolTip: sinon.stub(),
-      setImage: sinon.stub()
+      on: testSandbox.stub(),
+      setToolTip: testSandbox.stub(),
+      setImage: testSandbox.stub()
     };
-    const menuReturnStub = { popup: sinon.stub(), append: sinon.stub() };
-    const menuItemStub = sinon.stub();
+    const menuReturnStub = {
+      popup: testSandbox.stub(),
+      append: testSandbox.stub()
+    };
+    const menuItemStub = testSandbox.stub();
 
     beforeEach(() => {
       electronStub.BrowserWindow.returns(windowStub);
@@ -584,41 +636,36 @@ describe("index", () => {
       electronStub.Menu.returns(menuReturnStub);
     });
 
-    afterEach(() => {
-      electronStub.ipcMain.on.reset();
-      electronStub.Menu.reset();
-      electronStub.MenuItem.reset();
-
-      trayStub.on.reset();
-      trayStub.setToolTip.reset();
-      trayStub.setImage.reset();
-
-      menuReturnStub.popup.reset();
-      menuReturnStub.append.reset();
-    });
-
     it("should append a menu item to the menu", () => {
       configureApp();
 
       expect(electronStub.Menu.calledOnce).to.be.true;
-      expect(menuReturnStub.append.calledOnce).to.be.true;
-      expect(electronStub.MenuItem.calledOnce).to.be.true;
+      expect(menuReturnStub.append.calledTwice).to.be.true;
+      expect(electronStub.MenuItem.calledTwice).to.be.true;
       expect(electronStub.MenuItem.firstCall.args[0].label).to.equal("Quit");
       expect(electronStub.MenuItem.firstCall.args[0].click).to.be.a("function");
+      expect(electronStub.MenuItem.secondCall.args[0].label).to.equal("About");
+      expect(electronStub.MenuItem.secondCall.args[0].click).to.be.a(
+        "function"
+      );
     });
 
     it("should add listeners to ipcMain", () => {
       configureApp();
 
       electronStub.ipcMain.on.firstCall.args[1]();
+      electronStub.ipcMain.on.secondCall.args[1]();
 
-      expect(electronStub.ipcMain.on.calledTwice).to.be.true;
+      expect(electronStub.ipcMain.on.calledThrice).to.be.true;
       expect(electronStub.ipcMain.on.firstCall.args[0]).to.equal(
         "show-config-menu"
       );
       expect(menuReturnStub.popup.calledOnce).to.be.true;
-      expect(electronStub.ipcMain.on.secondCall.args[0]).to.equal("quit-app");
+      expect(electronStub.ipcMain.on.secondCall.args[0]).to.equal("show-about");
       expect(electronStub.ipcMain.on.secondCall.args[1]).to.be.a("function");
+      expect(windowStub.isVisible.calledOnce).to.be.true;
+      expect(electronStub.ipcMain.on.thirdCall.args[0]).to.equal("quit-app");
+      expect(electronStub.ipcMain.on.thirdCall.args[1]).to.be.a("function");
     });
 
     it("should hide the dock icon on macOS", () => {
@@ -634,7 +681,7 @@ describe("index", () => {
         "first-run": firstRunStub,
         "electron-is-dev": false,
         os: { platform: () => "win32" },
-        "is-online": sinon.stub().resolves(true),
+        "is-online": testSandbox.stub().resolves(true),
         "./auto-updater": autoUpdaterStub
       });
 

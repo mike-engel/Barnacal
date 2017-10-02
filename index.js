@@ -30,6 +30,7 @@ const isWin = platform() === "win32";
 // prevent garbage collection & icon from dissapearing
 let trayIcon = null;
 let window = null;
+let aboutWindow = null;
 
 const getTrayIconName = () =>
   `Design/icons/tray/BarnacalIcon${getDate(new Date())}Template@2x.png`;
@@ -40,7 +41,10 @@ const quitApp = (app, interval) => () => {
 };
 
 const reportToRaven = err => {
-  if (!isDev) isOnline().then(() => Raven.captureException(err)).catch(noop);
+  if (!isDev)
+    isOnline()
+      .then(() => Raven.captureException(err))
+      .catch(noop);
 };
 
 const getWindowPosition = (window, tray) => {
@@ -89,6 +93,42 @@ const toggleTray = (window, tray) => () => {
     window.hide();
   } else {
     window.show();
+  }
+};
+
+const configureAboutWindow = () => {
+  const htmlPath = `file://${__dirname}/about.html`;
+
+  const aboutWindow = new BrowserWindow({
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT,
+    resizable: false,
+    frame: false,
+    transparent: false,
+    show: false,
+    title: "About Barnacal",
+    center: true,
+    fullscreenable: false,
+    maximizable: false,
+    minimizable: false,
+    titleBarStyle: "hidden-inset",
+    backgroundColor: "#000",
+    webPreferences: {
+      backgroundThrottling: false,
+      devTools: true
+    }
+  });
+
+  aboutWindow.loadURL(htmlPath);
+
+  return aboutWindow;
+};
+
+const showAbout = aboutWindow => () => {
+  if (aboutWindow.isVisible()) {
+    aboutWindow.hide();
+  } else {
+    aboutWindow.show();
   }
 };
 
@@ -151,6 +191,7 @@ const configureTrayIcon = (window, trayIcon, menu) => {
 const configureApp = () => {
   const menu = new Menu();
   const window = configureWindow();
+  const aboutWindow = configureAboutWindow();
   const iconUpdateInterval = configureTrayIcon(window, trayIcon, menu);
   const quitAppWithContext = quitApp(app, iconUpdateInterval);
 
@@ -163,7 +204,15 @@ const configureApp = () => {
     })
   );
 
+  menu.append(
+    new MenuItem({
+      label: "About",
+      click: showAbout(aboutWindow)
+    })
+  );
+
   ipcMain.on("show-config-menu", () => menu.popup(window));
+  ipcMain.on("show-about", () => showAbout(aboutWindow)());
   ipcMain.on("quit-app", quitAppWithContext);
 };
 
@@ -191,6 +240,8 @@ module.exports = {
   reportToRaven,
   getWindowPosition,
   toggleTray,
+  configureAboutWindow,
+  showAbout,
   configureWindow,
   configureTrayIcon,
   configureApp,

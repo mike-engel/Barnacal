@@ -1,6 +1,7 @@
 let quit_app _evt => FFI.Electron.send "quit-app";
 
 let update_app _evt => FFI.Electron.send "install-update";
+let show_about _evt => FFI.Electron.send "show-about";
 
 let menu_styles =
   ReactDOMRe.Style.make
@@ -18,13 +19,23 @@ let menu_styles =
     marginBottom::"0.5em"
     ();
 
-let config_styles =
+let quit_styles =
   ReactDOMRe.Style.make
     display::"inline-block"
     height::"15px"
-    width::"14px"
+    width::"15px"
+    marginLeft::"0.5em"
     textDecoration::"none"
-    cursor::"default"
+    cursor::"pointer"
+    ();
+
+let show_about_styles =
+  ReactDOMRe.Style.make
+    display::"inline-block"
+    height::"15px"
+    width::"15px"
+    textDecoration::"none"
+    cursor::"pointer"
     ();
 
 let update_styles = ReactDOMRe.Style.make color::"#FFF" fontSize::"12px" ();
@@ -34,17 +45,31 @@ let link_styles =
 
 let component = ReasonReact.statelessComponent "Menu";
 
-let cog =
-  <svg width="14px" height="15px" viewBox="0 0 14 15">
-    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-      <rect fill="#FFF" x="6" y="0" width="2" height="8" rx="1" />
-      <path
-        d="M2.99266802,3.53436007 C1.76942592,4.63279117 1,6.22654106 1,8 C1,11.3137085 3.6862915,14 7,14 C10.3137085,14 13,11.3137085 13,8 C13,6.21282738 12.2186285,4.60815384 10.9788737,3.50896745"
-        stroke="#FFF"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </g>
+let power =
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#FFF"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+    <line x1="12" y1="2" x2="12" y2="12" />
+  </svg>;
+
+let info =
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#FFF"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="16" x2="12" y2="12" />
+    <line x1="12" y1="8" x2="12" y2="8" />
   </svg>;
 
 let make ::update_available _children => {
@@ -61,7 +86,10 @@ let make ::update_available _children => {
         ReasonReact.stringToElement "";
     <div style=menu_styles>
       <span style=update_styles> update_el </span>
-      <a style=config_styles href="#" onClick=quit_app> cog </a>
+      <div>
+        <a style=show_about_styles href="#" onClick=show_about> info </a>
+        <a style=quit_styles href="#" onClick=quit_app> power </a>
+      </div>
     </div>
   }
 };
