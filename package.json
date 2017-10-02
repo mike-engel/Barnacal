@@ -18,7 +18,7 @@
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
     "start:electron": "electron .",
-    "watch:electron": "watchexec -r -s SIGKILL -d -e js,html -i '*/lib/**' npm run start:electron"
+    "watch:electron": "watchexec -r -s SIGKILL -e js,html -i '*/lib/**' npm run start:electron"
   },
   "author": "Mike Engel <mike@mike-engel.com>",
   "license": "MIT",
@@ -37,25 +37,25 @@
     "react-dom": "^15.6.1"
   },
   "devDependencies": {
-    "bs-platform": "^1.9.1",
+    "bs-platform": "^1.9.3",
     "chai": "^4.1.2",
     "chalk": "^2.1.0",
-    "clean-webpack-plugin": "^0.1.16",
-    "electron": "^1.7.5",
-    "electron-builder": "^19.27.3",
-    "electron-builder-squirrel-windows": "^19.27.3",
+    "clean-webpack-plugin": "^0.1.17",
+    "electron": "^1.8.1",
+    "electron-builder": "^19.33.0",
+    "electron-builder-squirrel-windows": "^19.33.0",
     "figlet": "^1.2.0",
-    "mocha": "^3.5.0",
-    "nyc": "^11.1.0",
+    "mocha": "^3.5.3",
+    "nyc": "^11.2.1",
     "proxyquire": "^1.8.0",
-    "reason-react": "^0.2.3",
-    "release": "^2.1.0",
-    "sinon": "^3.2.1",
+    "reason-react": "^0.2.4",
+    "release": "^2.5.2",
+    "sinon": "^3.3.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
-    "webpack": "^3.5.5",
-    "webpack-dev-server": "^2.7.1",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.1",
     "webpack-merge": "^4.1.0",
-    "write-file-webpack-plugin": "^4.1.0"
+    "write-file-webpack-plugin": "^4.2.0"
   },
   "build": {
     "appId": "com.mike-engel.barnacal",

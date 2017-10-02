@@ -2,10 +2,9 @@ const path = require("path");
 const webpack = require("webpack");
 const WebpackDevServer = require("webpack-dev-server");
 const config = require("../webpack.dev.js");
-const defaultPort = 8080;
 const compiler = webpack(config);
 
-const PORT = process.env.PORT || defaultPort;
+const PORT = process.env.PORT || 8080;
 
 const server = new WebpackDevServer(compiler, {
   contentBase: path.resolve(__dirname, "../public"),
@@ -24,7 +23,7 @@ const server = new WebpackDevServer(compiler, {
 try {
   server.listen(PORT);
 } catch (e) {
-  console.error(e);
+  console.error("Webpack dev server error!", e);
   process.exit(1);
 }
 
