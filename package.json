@@ -18,8 +18,7 @@
     "start:bsb": "npm run build:bsb -- -w",
     "start:webpack": "node scripts/webpackDevServer.js",
     "start:electron": "electron .",
-    "watch:electron":
-      "watchexec -r -s SIGKILL -e js,html -i '*/lib/**' npm run start:electron"
+    "watch:electron": "watchexec -r -s SIGKILL -e js,html -i '*/lib/**' npm run start:electron"
   },
   "author": "Mike Engel <mike@mike-engel.com>",
   "license": "MIT",
@@ -30,8 +29,6 @@
     "is-online": "^7.0.0",
     "ms": "^2.0.0",
     "noop2": "^2.0.0",
-    "preact": "^8.2.5",
-    "preact-compat": "^3.17.0",
     "raven": "^2.1.2",
     "raven-js": "^3.17.0",
     "react": "^15.6.1",
@@ -81,11 +78,17 @@
       "target": [
         {
           "target": "deb",
-          "arch": ["ia32", "x64"]
+          "arch": [
+            "ia32",
+            "x64"
+          ]
         },
         {
           "target": "AppImage",
-          "arch": ["ia32", "x64"]
+          "arch": [
+            "ia32",
+            "x64"
+          ]
         }
       ]
     }

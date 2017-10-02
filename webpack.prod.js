@@ -9,12 +9,5 @@ module.exports = merge(config, {
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production")
     })
-  ],
-  resolve: {
-    alias: {
-      react: "preact-compat",
-      "react-dom": "preact-compat",
-      "create-react-class": "preact-compat/lib/create-react-class"
-    }
-  }
+  ]
 });
