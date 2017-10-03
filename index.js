@@ -119,7 +119,10 @@ const configureAboutWindow = () => {
     }
   });
 
-  aboutWindow.on("close", configureAboutWindow);
+  aboutWindow.on("close", evt => {
+    evt.preventDefault();
+    aboutWindow.hide();
+  });
 
   aboutWindow.loadURL(htmlPath);
 

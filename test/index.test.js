@@ -334,7 +334,8 @@ describe("index", () => {
   describe("configureAboutWindow", () => {
     const windowStub = {
       loadURL: testSandbox.stub(),
-      on: testSandbox.stub()
+      on: testSandbox.stub(),
+      hide: testSandbox.stub()
     };
 
     beforeEach(() => {
@@ -371,12 +372,14 @@ describe("index", () => {
     it("should bind events to the about window", () => {
       const result = configureAboutWindow();
       const dir = resolve(__dirname, "..");
+      const evtStub = { preventDefault: testSandbox.stub() };
+
+      windowStub.on.firstCall.args[1](evtStub);
 
       expect(windowStub.on.calledOnce).to.be.true;
-      expect(windowStub.on.firstCall.args).to.deep.equal([
-        "close",
-        configureAboutWindow
-      ]);
+      expect(windowStub.on.firstCall.args[0]).to.equal("close");
+      expect(evtStub.preventDefault.calledOnce).to.be.true;
+      expect(windowStub.hide.calledOnce).to.be.true;
       expect(result).to.deep.equal(windowStub);
     });
 
