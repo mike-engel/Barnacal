@@ -99,7 +99,7 @@ const toggleTray = (window, tray) => () => {
 const configureAboutWindow = () => {
   const htmlPath = `file://${__dirname}/about.html`;
 
-  const aboutWindow = new BrowserWindow({
+  aboutWindow = new BrowserWindow({
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     resizable: false,
@@ -118,6 +118,8 @@ const configureAboutWindow = () => {
       devTools: true
     }
   });
+
+  aboutWindow.on("close", configureAboutWindow);
 
   aboutWindow.loadURL(htmlPath);
 
@@ -191,9 +193,10 @@ const configureTrayIcon = (window, trayIcon, menu) => {
 const configureApp = () => {
   const menu = new Menu();
   const window = configureWindow();
-  const aboutWindow = configureAboutWindow();
   const iconUpdateInterval = configureTrayIcon(window, trayIcon, menu);
   const quitAppWithContext = quitApp(app, iconUpdateInterval);
+
+  configureAboutWindow();
 
   if (platform() === "darwin") app.dock.hide();
 
@@ -212,7 +215,7 @@ const configureApp = () => {
   );
 
   ipcMain.on("show-config-menu", () => menu.popup(window));
-  ipcMain.on("show-about", () => showAbout(aboutWindow)());
+  ipcMain.on("show-about", showAbout(aboutWindow));
   ipcMain.on("quit-app", quitAppWithContext);
 };
 

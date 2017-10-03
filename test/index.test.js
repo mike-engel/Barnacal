@@ -333,7 +333,8 @@ describe("index", () => {
 
   describe("configureAboutWindow", () => {
     const windowStub = {
-      loadURL: testSandbox.stub()
+      loadURL: testSandbox.stub(),
+      on: testSandbox.stub()
     };
 
     beforeEach(() => {
@@ -365,6 +366,18 @@ describe("index", () => {
           }
         }
       ]);
+    });
+
+    it("should bind events to the about window", () => {
+      const result = configureAboutWindow();
+      const dir = resolve(__dirname, "..");
+
+      expect(windowStub.on.calledOnce).to.be.true;
+      expect(windowStub.on.firstCall.args).to.deep.equal([
+        "close",
+        configureAboutWindow
+      ]);
+      expect(result).to.deep.equal(windowStub);
     });
 
     it("should load the url and return the window object", () => {
