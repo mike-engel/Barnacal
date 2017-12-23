@@ -8,5 +8,6 @@
   "package-specs": {
     "module": "es6"
   },
-  "bsc-flags": ["-bs-super-errors"]
+  "bsc-flags": ["-bs-super-errors"],
+  "refmt": 3
 }
