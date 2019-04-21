@@ -44,6 +44,12 @@ brew install watchexec
 npm run watch:electron
 ```
 
+# Debugging
+You can open Chrome Dev Tools while developing
+Put this in `index.js` inside `configureWindow` function. It will open Dev Tools in the calendar.
+```javascript
+window.webContents.openDevTools()
+```
 # Contributing
 
 Issues and Pull requests are both welcomed! Prettier is enabled by default as a pre-commit hook, but feel free to add it to your editor.
