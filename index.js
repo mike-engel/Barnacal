@@ -18,8 +18,13 @@ const {
   MenuItem,
   Tray,
   Notification,
-  BrowserWindow
+  BrowserWindow,
+  systemPreferences
 } = electron;
+
+// Setup global remote
+global.firstWeekDay = null
+
 const TRAY_ARROW_HEIGHT = 50;
 const WINDOW_WIDTH = 300;
 const WINDOW_HEIGHT = 300;
@@ -137,6 +142,52 @@ const showAbout = aboutWindow => () => {
   }
 };
 
+/**
+ * This command `getUserDefault` is like doing this in your OSX Terminal:
+ *   defaults read -g AppleFirstWeekday
+ *
+ * If all is ok should return something like this:
+ *   { gregorian = 2; }
+ *
+ * But can return a not found:
+ *   `The domain/default pair of
+ *    (kCFPreferencesAnyApplication, AppleFirstWeekday) does not exist`
+ *
+ * We ignore it when there is an error:
+ * If setting first day on Apple UI doesn't work. They can do this:
+ * in command line:
+ *   defaults write NSGlobalDomain AppleFirstWeekday -dict 'gregorian' 2
+ *
+ * This will setup first day of week to monday
+ */
+function readOSXUserFirstWeekDay () {
+  const firstWeekdayPref = systemPreferences.getUserDefault(
+    'AppleFirstWeekday',
+    'dictionary'
+  );
+
+  if (!Object.keys(firstWeekdayPref).length) return null
+
+  // key in this example is `gregorian` and day is `2`
+  // { gregorian = 2; }
+  const key = Object.keys(firstWeekdayPref)[0]
+  return firstWeekdayPref[key]
+}
+
+/**
+ * Send to calendar DOM window first weekday info
+ */
+function setUserFirstWeekday () {
+  // By default Sunday is first day of the week
+  let day = 1;
+
+  if (platform() === 'darwin') {
+    day = readOSXUserFirstWeekDay() || day;
+  }
+
+  global.firstWeekday = day;
+}
+
 const configureWindow = () => {
   const htmlPath = `file://${__dirname}/index${isDev ? ".dev" : ""}.html`;
 
@@ -194,6 +245,8 @@ const configureTrayIcon = (window, trayIcon, menu) => {
 };
 
 const configureApp = () => {
+  setUserFirstWeekday();
+
   const menu = new Menu();
   const window = configureWindow();
   const iconUpdateInterval = configureTrayIcon(window, trayIcon, menu);

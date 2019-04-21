@@ -3,9 +3,10 @@ module PackageJSON = {
 };
 
 module Electron = {
+  type electron_options = Js.t({. firstWeekday: int});
   [@bs.scope "ipcRenderer"] [@bs.module "electron"] external send : string => unit = "";
-  [@bs.scope "ipcRenderer"] [@bs.module "electron"]
-  external on : (string, 't => unit) => unit = "";
+  [@bs.scope "ipcRenderer"] [@bs.module "electron"] external on : (string, 't => unit) => unit = "";
+  [@bs.scope "remote"] [@bs.module "electron"] external getGlobal : (string) => electron_options = "getGlobal";
 };
 
 module Raven = {

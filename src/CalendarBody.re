@@ -4,9 +4,29 @@ let component = ReasonReact.statelessComponent("CalendarBody");
 
 let table_styles = ReactDOMRe.Style.make();
 
+/*
+ * Sunday is first day for JS Date
+ * sunday_index = 1
+ */
+let week_day_number = (date) => {
+  let sunday_index = 1;
+  let user_first_day = FFI.Electron.getGlobal("global")##firstWeekday;
+  let day_index = FFI.DateFns.get_day(date);
+
+  let offset_index = user_first_day - sunday_index;
+  let index = day_index - offset_index;
+
+  switch index {
+  | index when index === day_index => day_index
+  | index when index > 0 => index
+  | index when index < 0 => 7 + index
+  | index when index === 0 => 0
+  };
+};
+
 let week_of_month = (date, day_of_month) => {
   let first_of_month = FFI.DateFns.start_of_month(date);
-  let first_weekday = FFI.DateFns.get_day(first_of_month);
+  let first_weekday = week_day_number(first_of_month);
   let offset = day_of_month + first_weekday - 1;
   offset / 7
 };
@@ -14,7 +34,7 @@ let week_of_month = (date, day_of_month) => {
 let month_date = (date, idx, _val) => {
   let day_of_month = idx + 1;
   let date = FFI.DateFns.set_date(date, day_of_month);
-  let day_of_week = FFI.DateFns.get_day(date);
+  let day_of_week = week_day_number(date);
   let week = week_of_month(date, day_of_month);
   let is_today = FFI.DateFns.is_today(date);
   (week, day_of_week, day_of_month, is_today)
