@@ -22,7 +22,8 @@ const appPath = app.getAppPath();
 let trayIcon = null;
 let window = null;
 let aboutWindow = null;
-let readyToShow = false;
+/* istanbul ignore next */
+let readyToShow = process.env.NODE_ENV === "test" ? true : false;
 
 const getTrayIconName = () => `./icons/tray/BarnacalIcon${getDate(new Date())}Template@2x.png`;
 
@@ -78,7 +79,7 @@ function getUserFirstWeekday() {
 	if (platform() === "darwin") {
 		const firstWeekdayPref = systemPreferences.getUserDefault("AppleFirstWeekday", "dictionary");
 
-		if (!Object.keys(firstWeekdayPref).length) return null;
+		if (!Object.keys(firstWeekdayPref).length) return day;
 
 		// key in this example is `gregorian` and day is `2`
 		// { gregorian = 2; }
@@ -91,6 +92,7 @@ function getUserFirstWeekday() {
 }
 
 const toggleTray = (window, tray) => () => {
+	/* istanbul ignore next */
 	if (!readyToShow) return;
 
 	const [horizontalPosition, verticalPosition] = getWindowPosition(window, tray);
@@ -231,8 +233,8 @@ const configureBarnacal = () => {
 	ipcMain.on("show-config-menu", () => menu.popup(window));
 	ipcMain.on("show-about", toggleAbout(aboutWindow));
 	ipcMain.on("get-first-weekday", event => {
-		const day = getUserFirstWeekday();
-		event.reply("set-first-weekday", day);
+		/* istanbul ignore next */
+		event.reply("set-first-weekday", getUserFirstWeekday());
 	});
 	ipcMain.on("quit-app", quitAppWithContext);
 };
@@ -260,6 +262,7 @@ module.exports = {
 	quitApp,
 	reportToRaven,
 	getWindowPosition,
+	getUserFirstWeekday,
 	toggleTray,
 	configureAboutWindow,
 	showAbout: toggleAbout,
