@@ -12,7 +12,7 @@
 		"electron:watch": "watchexec -r -s SIGKILL -e js,html -i '*/lib/**' npm run electron:start",
 		"pack": "npm run build; electron-builder -mwl --dir",
 		"start": "node scripts/startDev.js",
-		"test": "mocha --stop --recursive test/**/*.test.js",
+		"test": "NODE_ENV=test mocha --exit --recursive test/**/*.test.js",
 		"test:coverage": "nyc --reporter=text --reporter=html npm run test"
 	},
 	"author": "Mike Engel <mike@mike-engel.com>",
