@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'self' 'unsafe-inline'; connect-src 'self' ws://localhost:*"
+		/>
+		<style>
+			html {
+				box-sizing: border-box;
+			}
+			*,
+			::after,
+			::before {
+				box-sizing: inherit;
+			}
+			body,
+			html {
+				margin: 0;
+				padding: 0;
+				min-height: 100%;
+				width: 100%;
+			}
+			::after:focus:not(:focus-visible),
+			::before:focus:not(:focus-visible),
+			:focus:not(:focus-visible) {
+				outline: 0;
+			}
+			.visually-hidden {
+				position: absolute;
+				white-space: nowrap;
+				width: 1px;
+				height: 1px;
+				overflow: hidden;
+				border: 0;
+				padding: 0;
+				clip: rect(0 0 0 0);
+				clip-path: inset(50%);
+				margin: -1px;
+			}
+			.plain-list {
+				list-style: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E");
+				padding-left: 0;
+			}
+			@media (prefers-reduced-motion: reduce) {
+				*,
+				::after,
+				::before {
+					transition: none !important;
+					animation: none !important;
+					scroll-behavior: auto !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app"></div>
+		<script src="./index.tsx"></script>
+	</body>
+</html>
