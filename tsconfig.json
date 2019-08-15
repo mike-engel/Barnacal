@@ -1,0 +1,34 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"inlineSources": true,
+		"jsx": "preserve",
+		"lib": [
+			"es2017",
+			"esnext.asynciterable",
+			"dom",
+			"dom.iterable",
+			"scripthost"
+		],
+		"module": "esnext",
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"pretty": true,
+		"removeComments": true,
+		"resolveJsonModule": true,
+		"outDir": "dist",
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strictNullChecks": true,
+		"target": "es2016",
+		"allowJs": true,
+		"strict": false,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"isolatedModules": true
+	},
+	"exclude": ["node_modules"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+}

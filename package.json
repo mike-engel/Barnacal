@@ -1,99 +1,88 @@
 {
-  "name": "barnacal",
-  "version": "0.8.3",
-  "description": "A simple menu bar app for viewing a calendar",
-  "main": "index.js",
-  "scripts": {
-    "build": "npm run build:bsb;npm run build:webpack",
-    "build:bsb": "bsb -make-world",
-    "build:webpack": "NODE_ENV=production webpack -p --config webpack.prod.js",
-    "clean": "npm run clean:bsb;npm run clean:project",
-    "clean:bsb": "bsb -clean-world",
-    "clean:project": "rm -rf public/main.js lib .merlin 'src/**/*.js' dist",
-    "dist": "npm run clean:project; npm run build; electron-builder -mwl",
-    "pack": "npm run clean:project; npm run build; electron-builder -mwl --dir",
-    "test": "mocha --stop --recursive test/**/*.test.js",
-    "test:coverage": "nyc --reporter=text --reporter=html npm run test",
-    "start": "node scripts/startDev.js",
-    "start:bsb": "npm run build:bsb -- -w",
-    "start:webpack": "node scripts/webpackDevServer.js",
-    "start:electron": "electron .",
-    "watch:electron": "watchexec -r -s SIGKILL -e js,html -i '*/lib/**' npm run start:electron"
-  },
-  "author": "Mike Engel <mike@mike-engel.com>",
-  "license": "MIT",
-  "dependencies": {
-    "date-fns": "^1.29.0",
-    "electron-is-dev": "^0.3.0",
-    "first-run": "^1.2.0",
-    "is-online": "^7.0.0",
-    "ms": "^2.1.1",
-    "noop2": "^2.0.0",
-    "raven": "^2.6.4",
-    "raven-js": "^3.27.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
-  },
-  "devDependencies": {
-    "bs-platform": "^2.2.3",
-    "chai": "^4.2.0",
-    "chalk": "^2.4.2",
-    "clean-webpack-plugin": "^0.1.19",
-    "electron": "^1.8.8",
-    "electron-builder": "^19.56.2",
-    "electron-builder-squirrel-windows": "^19.56.0",
-    "figlet": "^1.2.1",
-    "mocha": "^5.2.0",
-    "nyc": "^13.3.0",
-    "proxyquire": "^1.8.0",
-    "reason-react": "^0.3.4",
-    "release": "^6.0.1",
-    "sinon": "^7.3.2",
-    "uglifyjs-webpack-plugin": "^1.3.0",
-    "webpack": "^3.12.0",
-    "webpack-dev-server": "^2.11.5",
-    "webpack-merge": "^4.2.1",
-    "write-file-webpack-plugin": "^4.5.0"
-  },
-  "build": {
-    "appId": "com.mike-engel.barnacal",
-    "productName": "Barnacal",
-    "compression": "maximum",
-    "files": [
-      "Design/icons/**/*",
-      "public/main.js",
-      "index.js",
-      "index.html",
-      "about.html",
-      "auto-updater.js"
-    ],
-    "mac": {
-      "icon": "Design/icons/app/AppIcon.icns"
-    },
-    "win": {
-      "icon": "Design/icons/app/AppIcon.ico"
-    },
-    "linux": {
-      "category": "Utility",
-      "target": [
-        {
-          "target": "deb",
-          "arch": [
-            "ia32",
-            "x64"
-          ]
-        },
-        {
-          "target": "AppImage",
-          "arch": [
-            "ia32",
-            "x64"
-          ]
-        }
-      ]
-    }
-  },
-  "nyc": {
-    "check-coverage": true
-  }
+	"name": "barnacal",
+	"version": "0.9.0",
+	"description": "A simple menu bar app for viewing a calendar",
+	"main": "src/electron/index.js",
+	"scripts": {
+		"dev": "parcel --target=electron --public-url ./ src/ui/index.html",
+		"dev:server": "parcel src/ui/index.html",
+		"build": "parcel build src/ui/index.html",
+		"dist": "npm run build; electron-builder -mwl",
+		"electron:start": "electron ./src/electron/index",
+		"electron:watch": "watchexec -r -s SIGKILL -e js,html -i '*/lib/**' npm run electron:start",
+		"pack": "npm run build; electron-builder -mwl --dir",
+		"start": "node scripts/startDev.js",
+		"test": "mocha --stop --recursive test/**/*.test.js",
+		"test:coverage": "nyc --reporter=text --reporter=html npm run test"
+	},
+	"author": "Mike Engel <mike@mike-engel.com>",
+	"license": "MIT",
+	"dependencies": {
+		"date-fns": "^1.29.0",
+		"electron-is-dev": "^1.1.0",
+		"first-run": "^2.0.0",
+		"is-online": "^8.2.0",
+		"raven": "^2.6.4",
+		"raven-js": "^3.27.2",
+		"react": "^16.9.0",
+		"react-dom": "^16.9.0",
+		"styled-components": "^4.3.2",
+		"styled-typography": "^1.0.1"
+	},
+	"devDependencies": {
+		"@types/react": "^16.9.1",
+		"@types/react-dom": "^16.8.5",
+		"@types/styled-components": "^4.1.18",
+		"chai": "^4.2.0",
+		"electron": "^6.0.2",
+		"electron-builder": "^21.2.0",
+		"electron-builder-squirrel-windows": "^21.2.0",
+		"mocha": "^6.2.0",
+		"nyc": "^14.1.1",
+		"parcel-bundler": "^1.12.3",
+		"proxyquire": "^2.1.3",
+		"sinon": "^7.4.1",
+		"typescript": "^3.5.3"
+	},
+	"build": {
+		"appId": "com.mike-engel.barnacal",
+		"productName": "Barnacal",
+		"compression": "maximum",
+		"files": [
+			"src/electron/icons/**/*",
+			"public/main.js",
+			"src/electron/index.js",
+			"src/electron/index.html",
+			"src/electron/about.html",
+			"src/electron/auto-updater.js"
+		],
+		"mac": {
+			"icon": "src/electron/icons/app/AppIcon.icns"
+		},
+		"win": {
+			"icon": "src/electron/icons/app/AppIcon.ico"
+		},
+		"linux": {
+			"category": "Utility",
+			"target": [
+				{
+					"target": "deb",
+					"arch": [
+						"ia32",
+						"x64"
+					]
+				},
+				{
+					"target": "AppImage",
+					"arch": [
+						"ia32",
+						"x64"
+					]
+				}
+			]
+		}
+	},
+	"nyc": {
+		"check-coverage": true
+	}
 }

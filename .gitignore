@@ -1,12 +1,11 @@
 .DS_Store
 Thumbs.db
 
-node_modules
-bs
-public
-dist
-.nyc_output
-coverage
+*.orig
 
-.merlin
-
+.cache/
+.nyc_output/
+node_modules/
+dist/
+coverage/
+public/
