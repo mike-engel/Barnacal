@@ -12,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Install dependencies
-        run: "npm install"
+        run: npm install
       - name: Run tests
         env:
           NODE_ENV: test
-        run: cargo test --verbose
+        run: npm run test:coverage
