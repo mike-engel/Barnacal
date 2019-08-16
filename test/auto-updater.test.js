@@ -38,7 +38,7 @@ const ravenStub = {
 
 const autoUpdater = proxyquire("../src/electron/auto-updater", {
 	electron: electronStub,
-	raven: ravenStub,
+	"@sentry/electron": ravenStub,
 	"electron-is-dev": false,
 	"is-online": sinon.stub().resolves(),
 	os: { platform: () => "darwin" }
@@ -90,10 +90,16 @@ describe("autoUpdater", () => {
 			electronStub.autoUpdater.on.firstCall.args[1](null, "yolo", "v1.0.0");
 
 			expect(electronStub.autoUpdater.on.calledOnce).to.be.true;
-			expect(electronStub.autoUpdater.on.firstCall.args[0]).to.equal("update-downloaded");
+			expect(electronStub.autoUpdater.on.firstCall.args[0]).to.equal(
+				"update-downloaded"
+			);
 			expect(windowStub.webContents.send.calledTwice).to.be.true;
-			expect(windowStub.webContents.send.firstCall.args).to.deep.equal(["update-downloaded"]);
-			expect(windowStub.webContents.send.secondCall.args[0]).to.deep.equal("update-ready");
+			expect(windowStub.webContents.send.firstCall.args).to.deep.equal([
+				"update-downloaded"
+			]);
+			expect(windowStub.webContents.send.secondCall.args[0]).to.deep.equal(
+				"update-ready"
+			);
 		});
 
 		it("should listen for the event to install the update", () => {
@@ -127,7 +133,9 @@ describe("autoUpdater", () => {
 				expect(electronStub.autoUpdater.on.calledOnce).to.be.true;
 				expect(electronStub.autoUpdater.on.firstCall.args[0]).to.equal("error");
 				expect(ravenStub.captureException.calledOnce).to.be.true;
-				expect(ravenStub.captureException.firstCall.args).to.deep.equal(["yolo"]);
+				expect(ravenStub.captureException.firstCall.args).to.deep.equal([
+					"yolo"
+				]);
 				done();
 			});
 		});
@@ -135,7 +143,7 @@ describe("autoUpdater", () => {
 		it("should not report autoupdater errors to sentry in non-prod", done => {
 			const autoUpdaterDev = proxyquire("../src/electron/auto-updater", {
 				electron: electronStub,
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"electron-is-dev": true,
 				"is-online": sinon.stub().resolves(),
 				os: { platform: () => "darwin" }
@@ -154,7 +162,7 @@ describe("autoUpdater", () => {
 		it("should not report autoupdater errors to sentry if offline", done => {
 			const autoUpdaterDev = proxyquire("../src/electron/auto-updater", {
 				electron: electronStub,
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"electron-is-dev": false,
 				"is-online": sinon.stub().rejects(),
 				os: { platform: () => "darwin" }
@@ -208,7 +216,8 @@ describe("autoUpdater", () => {
 			expect(electronStub.Notification.firstCall.args).to.deep.equal([
 				{
 					title: "Barnacal update available",
-					body: "Barnacal v1.0.0 is ready to install. Click to apply the update."
+					body:
+						"Barnacal v1.0.0 is ready to install. Click to apply the update."
 				}
 			]);
 			expect(notificationReturnStub.show.calledOnce).to.be.true;

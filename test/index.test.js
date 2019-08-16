@@ -62,7 +62,7 @@ const {
 	WINDOW_HEIGHT
 } = proxyquire("../src/electron/index", {
 	electron: electronStub,
-	raven: ravenStub,
+	"@sentry/electron": ravenStub,
 	"first-run": firstRunStub,
 	"electron-is-dev": false,
 	os: { platform: () => "darwin" },
@@ -103,7 +103,7 @@ describe("index", () => {
 
 			proxyquire("../src/electron/index", {
 				electron: electronStub,
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"first-run": firstRunStub,
 				"electron-is-dev": true,
 				os: { platform: () => "darwin" },
@@ -119,7 +119,7 @@ describe("index", () => {
 
 			proxyquire("../src/electron/index", {
 				electron: electronStub,
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"first-run": firstRunStub.returns(false),
 				"electron-is-dev": false,
 				os: { platform: () => "darwin" },
@@ -167,7 +167,7 @@ describe("index", () => {
 				"../src/electron/index",
 				{
 					electron: electronStub,
-					raven: ravenStub,
+					"@sentry/electron": ravenStub,
 					"first-run": firstRunStub,
 					"electron-is-dev": true,
 					os: { platform: () => "darwin" },
@@ -189,7 +189,7 @@ describe("index", () => {
 				"../src/electron/index",
 				{
 					electron: electronStub,
-					raven: ravenStub,
+					"@sentry/electron": ravenStub,
 					"first-run": firstRunStub,
 					"electron-is-dev": false,
 					os: { platform: () => "darwin" },
@@ -211,7 +211,7 @@ describe("index", () => {
 		it("should return 1 for non-darwin platforms", () => {
 			const { getUserFirstWeekday } = proxyquire("../src/electron/index", {
 				electron: electronStub,
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"first-run": firstRunStub.returns(false),
 				"electron-is-dev": false,
 				os: { platform: () => "win32" },
@@ -227,7 +227,7 @@ describe("index", () => {
 		it("should return the preference for darwin platforms", () => {
 			const { getUserFirstWeekday } = proxyquire("../src/electron/index", {
 				electron: electronStub,
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"first-run": firstRunStub.returns(false),
 				"electron-is-dev": false,
 				os: { platform: () => "darwin" },
@@ -248,7 +248,7 @@ describe("index", () => {
 						getUserDefault: () => ({})
 					}
 				},
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"first-run": firstRunStub.returns(false),
 				"electron-is-dev": false,
 				os: { platform: () => "darwin" },
@@ -269,7 +269,7 @@ describe("index", () => {
 						getUserDefault: () => ({ gregorian: null })
 					}
 				},
-				raven: ravenStub,
+				"@sentry/electron": ravenStub,
 				"first-run": firstRunStub.returns(false),
 				"electron-is-dev": false,
 				os: { platform: () => "darwin" },
@@ -308,7 +308,7 @@ describe("index", () => {
 				"../src/electron/index",
 				{
 					electron: electronStub,
-					raven: ravenStub,
+					"@sentry/electron": ravenStub,
 					"first-run": firstRunStub.returns(false),
 					"electron-is-dev": false,
 					os: { platform: () => "win32" },
@@ -542,7 +542,7 @@ describe("index", () => {
 				"../src/electron/index",
 				{
 					electron: electronStub,
-					raven: ravenStub,
+					"@sentry/electron": ravenStub,
 					"first-run": firstRunStub,
 					"electron-is-dev": true,
 					os: { platform: () => "win32" },
@@ -732,7 +732,7 @@ describe("index", () => {
 				"../src/electron/index",
 				{
 					electron: electronStub,
-					raven: ravenStub,
+					"@sentry/electron": ravenStub,
 					"first-run": firstRunStub,
 					"electron-is-dev": false,
 					os: { platform: () => "win32" },

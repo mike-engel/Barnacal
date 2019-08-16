@@ -1,7 +1,7 @@
 const { autoUpdater, ipcMain, Notification } = require("electron");
 const isDev = require("electron-is-dev");
 const isOnline = require("is-online");
-const Raven = require("raven");
+const Sentry = require("@sentry/electron");
 const { version } = require("../../package");
 const { platform } = require("os");
 
@@ -15,7 +15,7 @@ const init = () => {
 
 		if (!isDev)
 			isOnline()
-				.then(() => Raven.captureException(err))
+				.then(() => Sentry.captureException(err))
 				.catch(() => {});
 	});
 
