@@ -432,11 +432,11 @@ describe("index", () => {
 
 		it("should load the url and return the window object", () => {
 			const result = configureAboutWindow();
-			const dir = resolve(__dirname, "..");
+			const file = resolve(__dirname, "..", "src", "ui", "about.html");
 
 			expect(windowStub.loadURL.callCount).to.equal(1);
 			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([
-				`file://${dir}/src/ui/about.html`
+				`file://${file}`
 			]);
 			expect(result).to.deep.equal(windowStub);
 		});
@@ -558,11 +558,11 @@ describe("index", () => {
 
 		it("should load the url and return the window object", () => {
 			const result = configureWindow();
-			const dir = resolve(__dirname, "..");
+			const file = resolve(__dirname, "..", "public", "index.html");
 
 			expect(windowStub.loadURL.callCount).to.equal(1);
 			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([
-				`file://${dir}/public/index.html`
+				`file://${file}`
 			]);
 			expect(result).to.deep.equal(windowStub);
 		});
