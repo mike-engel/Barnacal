@@ -84,39 +84,18 @@ describe("index", () => {
 	});
 
 	context("startup", () => {
-		it("should config and install raven", () => {
-			expect(ravenStub.config.callCount).to.equal(1);
-			expect(ravenStub.install.callCount).to.equal(1);
-			expect(ravenStub.config.getCall(0).args[0]).to.be.a("string");
-			expect(ravenStub.config.getCall(0).args[1]).to.deep.equal({
-				release: version
-			});
-			expect(ravenStub.install.getCall(0).args).to.deep.equal([]);
-		});
-
 		it("should add a listener for `beforeExit`", () => {
-			expect(process.on.getCall(0).args).to.deep.equal(["beforeExit", electronStub.app.quit]);
+			expect(process.on.getCall(0).args).to.deep.equal([
+				"beforeExit",
+				electronStub.app.quit
+			]);
 		});
 
 		it("should set the login settings on first run", () => {
 			expect(electronStub.app.setLoginItemSettings.callCount).to.equal(1);
-			expect(electronStub.app.setLoginItemSettings.getCall(0).args).to.deep.equal([
-				{ openAtLogin: true, openAsHidden: true }
-			]);
-		});
-
-		it("should not install raven in non-prod", () => {
-			proxyquire("../src/electron/index", {
-				electron: electronStub,
-				raven: ravenStub,
-				"first-run": firstRunStub,
-				"electron-is-dev": true,
-				os: { platform: () => "darwin" },
-				"is-online": testSandbox.stub().resolves(true),
-				"./auto-updater": autoUpdaterStub
-			});
-
-			expect(ravenStub.config.callCount).to.equal(0);
+			expect(
+				electronStub.app.setLoginItemSettings.getCall(0).args
+			).to.deep.equal([{ openAtLogin: true, openAsHidden: true }]);
 		});
 
 		it("should not set the login settings in non-prod", () => {
@@ -157,7 +136,9 @@ describe("index", () => {
 		const date = getDate(now);
 
 		it("should return the relative path to the icon for today", () => {
-			expect(getTrayIconName()).to.equal(`./icons/tray/BarnacalIcon${date}Template@2x.png`);
+			expect(getTrayIconName()).to.equal(
+				`./icons/tray/BarnacalIcon${date}Template@2x.png`
+			);
 		});
 	});
 
@@ -181,26 +162,19 @@ describe("index", () => {
 	context("reportToRaven", () => {
 		const error = "YOLOERR";
 
-		it("should only capture the exception in prod", done => {
-			reportToRaven(error);
-
-			setTimeout(() => {
-				expect(ravenStub.captureException.callCount).to.equal(1);
-				expect(ravenStub.captureException.getCall(0).args).to.deep.equal([error]);
-				done();
-			});
-		});
-
 		it("should not capture the exception in non-prod", done => {
-			const { reportToRaven: reportToRavenDev } = proxyquire("../src/electron/index", {
-				electron: electronStub,
-				raven: ravenStub,
-				"first-run": firstRunStub,
-				"electron-is-dev": true,
-				os: { platform: () => "darwin" },
-				"is-online": testSandbox.stub().resolves(true),
-				"./auto-updater": autoUpdaterStub
-			});
+			const { reportToRaven: reportToRavenDev } = proxyquire(
+				"../src/electron/index",
+				{
+					electron: electronStub,
+					raven: ravenStub,
+					"first-run": firstRunStub,
+					"electron-is-dev": true,
+					os: { platform: () => "darwin" },
+					"is-online": testSandbox.stub().resolves(true),
+					"./auto-updater": autoUpdaterStub
+				}
+			);
 
 			reportToRavenDev(error);
 
@@ -211,15 +185,18 @@ describe("index", () => {
 		});
 
 		it("should not capture the exception if offline", done => {
-			const { reportToRaven: reportToRavenDev } = proxyquire("../src/electron/index", {
-				electron: electronStub,
-				raven: ravenStub,
-				"first-run": firstRunStub,
-				"electron-is-dev": false,
-				os: { platform: () => "darwin" },
-				"is-online": testSandbox.stub().rejects(false),
-				"./auto-updater": autoUpdaterStub
-			});
+			const { reportToRaven: reportToRavenDev } = proxyquire(
+				"../src/electron/index",
+				{
+					electron: electronStub,
+					raven: ravenStub,
+					"first-run": firstRunStub,
+					"electron-is-dev": false,
+					os: { platform: () => "darwin" },
+					"is-online": testSandbox.stub().rejects(false),
+					"./auto-updater": autoUpdaterStub
+				}
+			);
 
 			reportToRavenDev(error);
 
@@ -327,15 +304,18 @@ describe("index", () => {
 		});
 
 		it("should return the x and y position for windows machines", () => {
-			const { getWindowPosition: getWindowPositionWin } = proxyquire("../src/electron/index", {
-				electron: electronStub,
-				raven: ravenStub,
-				"first-run": firstRunStub.returns(false),
-				"electron-is-dev": false,
-				os: { platform: () => "win32" },
-				"is-online": testSandbox.stub().resolves(true),
-				"./auto-updater": autoUpdaterStub
-			});
+			const { getWindowPosition: getWindowPositionWin } = proxyquire(
+				"../src/electron/index",
+				{
+					electron: electronStub,
+					raven: ravenStub,
+					"first-run": firstRunStub.returns(false),
+					"electron-is-dev": false,
+					os: { platform: () => "win32" },
+					"is-online": testSandbox.stub().resolves(true),
+					"./auto-updater": autoUpdaterStub
+				}
+			);
 
 			const [x, y] = getWindowPositionWin(windowStub, trayStub);
 
@@ -455,7 +435,9 @@ describe("index", () => {
 			const dir = resolve(__dirname, "..");
 
 			expect(windowStub.loadURL.callCount).to.equal(1);
-			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([`file://${dir}/src/ui/about.html`]);
+			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([
+				`file://${dir}/src/ui/about.html`
+			]);
 			expect(result).to.deep.equal(windowStub);
 		});
 	});
@@ -525,8 +507,14 @@ describe("index", () => {
 
 			expect(windowStub.webContents.on.callCount).to.equal(1);
 			expect(windowStub.on.callCount).to.equal(4);
-			expect(windowStub.webContents.on.getCall(0).args).to.deep.equal(["crashed", reportToRaven]);
-			expect(windowStub.on.getCall(1).args).to.deep.equal(["unresponsive", reportToRaven]);
+			expect(windowStub.webContents.on.getCall(0).args).to.deep.equal([
+				"crashed",
+				reportToRaven
+			]);
+			expect(windowStub.on.getCall(1).args).to.deep.equal([
+				"unresponsive",
+				reportToRaven
+			]);
 		});
 
 		it("should hide and update the window on blur", () => {
@@ -537,7 +525,9 @@ describe("index", () => {
 			expect(windowStub.on.getCall(3).args[0]).to.equal("blur");
 			expect(windowStub.hide.callCount).to.equal(1);
 			expect(windowStub.webContents.send.callCount).to.equal(1);
-			expect(windowStub.webContents.send.getCall(0).args).to.be.deep.equal(["background-update"]);
+			expect(windowStub.webContents.send.getCall(0).args).to.be.deep.equal([
+				"background-update"
+			]);
 		});
 
 		it("should configure the autoupdater", () => {
@@ -548,15 +538,18 @@ describe("index", () => {
 		});
 
 		it("should not configure the autoupdater in non-prod", () => {
-			const { configureWindow: configureWindowDev } = proxyquire("../src/electron/index", {
-				electron: electronStub,
-				raven: ravenStub,
-				"first-run": firstRunStub,
-				"electron-is-dev": true,
-				os: { platform: () => "win32" },
-				"is-online": testSandbox.stub().resolves(true),
-				"./auto-updater": autoUpdaterStub
-			});
+			const { configureWindow: configureWindowDev } = proxyquire(
+				"../src/electron/index",
+				{
+					electron: electronStub,
+					raven: ravenStub,
+					"first-run": firstRunStub,
+					"electron-is-dev": true,
+					os: { platform: () => "win32" },
+					"is-online": testSandbox.stub().resolves(true),
+					"./auto-updater": autoUpdaterStub
+				}
+			);
 
 			configureWindowDev();
 
@@ -568,7 +561,9 @@ describe("index", () => {
 			const dir = resolve(__dirname, "..");
 
 			expect(windowStub.loadURL.callCount).to.equal(1);
-			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([`file://${dir}/public/index.html`]);
+			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([
+				`file://${dir}/public/index.html`
+			]);
 			expect(result).to.deep.equal(windowStub);
 		});
 	});
@@ -641,7 +636,9 @@ describe("index", () => {
 			expect(trayStub.setImage.callCount).to.equal(1);
 			expect(trayStub.setImage.getCall(0).args).to.deep.equal([iconPath]);
 			expect(windowStub.webContents.send.callCount).to.equal(1);
-			expect(windowStub.webContents.send.getCall(0).args).to.deep.equal(["background-update"]);
+			expect(windowStub.webContents.send.getCall(0).args).to.deep.equal([
+				"background-update"
+			]);
 
 			setInterval.restore();
 		});
@@ -693,9 +690,13 @@ describe("index", () => {
 			expect(menuReturnStub.append.callCount).to.equal(2);
 			expect(electronStub.MenuItem.callCount).to.equal(2);
 			expect(electronStub.MenuItem.getCall(0).args[0].label).to.equal("About");
-			expect(electronStub.MenuItem.getCall(0).args[0].click).to.be.a("function");
+			expect(electronStub.MenuItem.getCall(0).args[0].click).to.be.a(
+				"function"
+			);
 			expect(electronStub.MenuItem.getCall(1).args[0].label).to.equal("Quit");
-			expect(electronStub.MenuItem.getCall(1).args[0].click).to.be.a("function");
+			expect(electronStub.MenuItem.getCall(1).args[0].click).to.be.a(
+				"function"
+			);
 		});
 
 		it("should add listeners to ipcMain", () => {
@@ -705,12 +706,16 @@ describe("index", () => {
 			electronStub.ipcMain.on.getCall(1).args[1]();
 
 			expect(electronStub.ipcMain.on.callCount).to.equal(4);
-			expect(electronStub.ipcMain.on.getCall(0).args[0]).to.equal("show-config-menu");
+			expect(electronStub.ipcMain.on.getCall(0).args[0]).to.equal(
+				"show-config-menu"
+			);
 			expect(menuReturnStub.popup.callCount).to.equal(1);
 			expect(electronStub.ipcMain.on.getCall(1).args[0]).to.equal("show-about");
 			expect(electronStub.ipcMain.on.getCall(1).args[1]).to.be.a("function");
 			expect(windowStub.isVisible.callCount).to.equal(1);
-			expect(electronStub.ipcMain.on.getCall(2).args[0]).to.equal("get-first-weekday");
+			expect(electronStub.ipcMain.on.getCall(2).args[0]).to.equal(
+				"get-first-weekday"
+			);
 			expect(electronStub.ipcMain.on.getCall(2).args[1]).to.be.a("function");
 			expect(electronStub.ipcMain.on.getCall(3).args[0]).to.equal("quit-app");
 			expect(electronStub.ipcMain.on.getCall(3).args[1]).to.be.a("function");
@@ -723,15 +728,18 @@ describe("index", () => {
 		});
 
 		it("should not hide the dock on non-macOS machines", () => {
-			const { configureBarnacal: configureBarnacalWin } = proxyquire("../src/electron/index", {
-				electron: electronStub,
-				raven: ravenStub,
-				"first-run": firstRunStub,
-				"electron-is-dev": false,
-				os: { platform: () => "win32" },
-				"is-online": testSandbox.stub().resolves(true),
-				"./auto-updater": autoUpdaterStub
-			});
+			const { configureBarnacal: configureBarnacalWin } = proxyquire(
+				"../src/electron/index",
+				{
+					electron: electronStub,
+					raven: ravenStub,
+					"first-run": firstRunStub,
+					"electron-is-dev": false,
+					os: { platform: () => "win32" },
+					"is-online": testSandbox.stub().resolves(true),
+					"./auto-updater": autoUpdaterStub
+				}
+			);
 
 			configureBarnacalWin();
 

@@ -14,7 +14,15 @@ const WINDOW_HEIGHT = 290;
 const HORIZ_PADDING = 15;
 const VERT_PADDING = 15;
 
-const { app, ipcMain, Menu, MenuItem, Tray, BrowserWindow, systemPreferences } = electron;
+const {
+	app,
+	ipcMain,
+	Menu,
+	MenuItem,
+	Tray,
+	BrowserWindow,
+	systemPreferences
+} = electron;
 const isWin = platform() === "win32";
 
 // prevent garbage collection & icon from dissapearing
@@ -24,13 +32,15 @@ let aboutWindow = null;
 /* istanbul ignore next */
 let readyToShow = process.env.NODE_ENV === "test" ? true : false;
 
-const getTrayIconName = () => `./icons/tray/BarnacalIcon${getDate(new Date())}Template@2x.png`;
+const getTrayIconName = () =>
+	`./icons/tray/BarnacalIcon${getDate(new Date())}Template@2x.png`;
 
 const quitApp = (app, interval) => () => {
 	clearInterval(interval);
 	app.exit();
 };
 
+/* istanbul ignore next */
 const reportToRaven = err => {
 	if (!isDev)
 		isOnline()
@@ -47,7 +57,8 @@ const getWindowPosition = (window, tray) => {
 	const displayArea = display.workArea;
 
 	if (isWin) {
-		const horizontalPosition = displayArea.x + displayArea.width - windowSize[0];
+		const horizontalPosition =
+			displayArea.x + displayArea.width - windowSize[0];
 		const verticalPosition = displayArea.y + displayArea.height - windowSize[1];
 
 		return [horizontalPosition, verticalPosition];
@@ -76,7 +87,10 @@ function getUserFirstWeekday() {
 	let day = 1;
 
 	if (platform() === "darwin") {
-		const firstWeekdayPref = systemPreferences.getUserDefault("AppleFirstWeekday", "dictionary");
+		const firstWeekdayPref = systemPreferences.getUserDefault(
+			"AppleFirstWeekday",
+			"dictionary"
+		);
 
 		if (!Object.keys(firstWeekdayPref).length) return day;
 
@@ -94,7 +108,10 @@ const toggleTray = (window, tray) => () => {
 	/* istanbul ignore next */
 	if (!readyToShow) return;
 
-	const [horizontalPosition, verticalPosition] = getWindowPosition(window, tray);
+	const [horizontalPosition, verticalPosition] = getWindowPosition(
+		window,
+		tray
+	);
 
 	window.setPosition(horizontalPosition, verticalPosition);
 
@@ -171,7 +188,10 @@ const configureAboutWindow = () => {
 };
 
 const configureWindow = () => {
-	const htmlPath = `file://${path.resolve(__dirname, "../../public/index.html")}`;
+	const htmlPath = `file://${path.resolve(
+		__dirname,
+		"../../public/index.html"
+	)}`;
 
 	window = new BrowserWindow({
 		width: WINDOW_WIDTH,
@@ -238,7 +258,8 @@ const configureBarnacal = () => {
 	ipcMain.on("quit-app", quitAppWithContext);
 };
 
-if (!isDev) {
+/* istanbul ignore next */
+if (!isDev && process.env.NODE_ENV !== "test") {
 	Sentry.init({
 		dsn: "https://f98d2418699d4fe9acac2e08621e31d0@sentry.io/204280"
 	});
