@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@sentry/cli": "^1.47.1",
-    "@types/react": "^16.9.1",
+    "@types/react": "^16.9.2",
     "@types/react-dom": "^16.8.5",
     "@types/styled-components": "^4.1.18",
     "chai": "^4.2.0",
