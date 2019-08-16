@@ -5,7 +5,7 @@ const isDev = require("electron-is-dev");
 const isOnline = require("is-online");
 const path = require("path");
 const { platform } = require("os");
-const Raven = require("raven");
+const Sentry = require("@sentry/electron");
 const autoUpdater = require("./auto-updater");
 const { version } = require("../../package.json");
 
@@ -16,7 +16,6 @@ const VERT_PADDING = 15;
 
 const { app, ipcMain, Menu, MenuItem, Tray, BrowserWindow, systemPreferences } = electron;
 const isWin = platform() === "win32";
-const appPath = app.getAppPath();
 
 // prevent garbage collection & icon from dissapearing
 let trayIcon = null;
@@ -115,7 +114,7 @@ const toggleAbout = aboutWindow => () => {
 };
 
 const configureTrayIcon = (window, trayIcon, menu) => {
-	const menuIconPath = path.join(appPath, getTrayIconName());
+	const menuIconPath = path.join(__dirname, getTrayIconName());
 
 	trayIcon = new Tray(menuIconPath);
 
@@ -139,7 +138,7 @@ const configureTrayIcon = (window, trayIcon, menu) => {
 };
 
 const configureAboutWindow = () => {
-	const htmlPath = `file://${path.resolve(appPath, "../ui")}/about.html`;
+	const htmlPath = `file://${path.resolve(__dirname, "../ui/about.html")}`;
 
 	aboutWindow = new BrowserWindow({
 		width: WINDOW_WIDTH,
@@ -172,7 +171,7 @@ const configureAboutWindow = () => {
 };
 
 const configureWindow = () => {
-	const htmlPath = `file://${path.resolve(appPath, "../../dist/index.html")}`;
+	const htmlPath = `file://${path.resolve(__dirname, "../../public/index.html")}`;
 
 	window = new BrowserWindow({
 		width: WINDOW_WIDTH,
@@ -240,12 +239,9 @@ const configureBarnacal = () => {
 };
 
 if (!isDev) {
-	Raven.config(
-		"https://f98d2418699d4fe9acac2e08621e31d0:f0dd6bacf1dc4560977c18ac28f57b15@sentry.io/204280",
-		{
-			release: version
-		}
-	).install();
+	Sentry.init({
+		dsn: "https://f98d2418699d4fe9acac2e08621e31d0@sentry.io/204280"
+	});
 }
 
 // set the app to open on login

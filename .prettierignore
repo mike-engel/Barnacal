@@ -1,0 +1,10 @@
+package.json
+package-lock.json
+
+.cache/
+.electron-symbols/
+.nyc_output/
+coverage/
+design/
+dist/
+public/

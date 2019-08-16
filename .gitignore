@@ -4,8 +4,11 @@ Thumbs.db
 *.orig
 
 .cache/
+.electron-symbols/
 .nyc_output/
 node_modules/
 dist/
 coverage/
 public/
+
+sentry.properties
