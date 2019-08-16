@@ -4,9 +4,16 @@ import { ipcRenderer } from "electron";
 import styled, { ThemeProvider } from "styled-components";
 import { GlobalTypeStyles } from "styled-typography";
 import { addMonths, subMonths } from "date-fns";
+import * as Sentry from "@sentry/browser";
 import { Header } from "./header";
 import { Menu } from "./menu";
 import { Calendar } from "./calendar";
+
+if (process.env.NODE_ENV !== "development") {
+	Sentry.init({
+		dsn: "https://970be29a9988418ebe1215c7f12223ef@sentry.io/204281"
+	});
+}
 
 enum DateAction {
 	Next = "NEXT",
@@ -20,6 +27,12 @@ export const RawApp = ({ className }: any) => {
 
 	useEffect(() => {
 		ipcRenderer.on("update-ready", () => setUpdateAvailable(true));
+		ipcRenderer.on("background-update", () => setDate(new Date()));
+
+		return () => {
+			ipcRenderer.removeAllListeners("update-ready");
+			ipcRenderer.removeAllListeners("background-update");
+		};
 	}, []);
 
 	const updateDate = (action: DateAction) =>

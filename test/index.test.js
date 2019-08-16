@@ -568,7 +568,7 @@ describe("index", () => {
 			const dir = resolve(__dirname, "..");
 
 			expect(windowStub.loadURL.callCount).to.equal(1);
-			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([`file://${dir}/dist/index.html`]);
+			expect(windowStub.loadURL.getCall(0).args).to.deep.equal([`file://${dir}/public/index.html`]);
 			expect(result).to.deep.equal(windowStub);
 		});
 	});
