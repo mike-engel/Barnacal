@@ -147,6 +147,8 @@ const configureTrayIcon = (window, trayIcon, menu) => {
 
 	// update the icon every day
 	const iconUpdateInterval = setInterval(() => {
+		if (!window) return;
+
 		trayIcon.setImage(path.join(__dirname, getTrayIconName()));
 		if (!window.isVisible()) window.webContents.send("background-update");
 	}, 60000);
