@@ -1,6 +1,6 @@
 const electron = require("electron");
 const firstRun = require("first-run");
-const getDate = require("date-fns/get_date");
+const { getDate } = require("date-fns");
 const isDev = require("electron-is-dev");
 const isOnline = require("is-online");
 const path = require("path");

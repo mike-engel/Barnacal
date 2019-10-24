@@ -23,7 +23,7 @@ export const RawHeader = ({
 			←
 		</a>
 		<Heading color="#FFF" onClick={resetMonth}>
-			{format(date, "MMMM YYYY")}
+			{format(date, "LLLL yyyy")}
 		</Heading>
 		<a href="#" onClick={nextMonth}>
 			→

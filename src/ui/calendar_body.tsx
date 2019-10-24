@@ -41,7 +41,8 @@ export const weeks = (date: Date, firstWeekday: number) => {
 	return totalDays.reduce((acc, _, dayOfMonth) => {
 		const currentDay = setDate(date, dayOfMonth + 1);
 		const week = weekOfMonth(currentDay, firstWeekday);
-		const dayOfWeek = weekDayNumber(currentDay, firstWeekday) - (firstWeekday - 1);
+		const dayOfWeek =
+			weekDayNumber(currentDay, firstWeekday) - (firstWeekday - 1);
 
 		acc[week][dayOfWeek] = dayOfMonth + 1;
 
@@ -63,7 +64,12 @@ export const RawCalendarBody = ({ date, firstWeekday, className }: Props) => {
 			{weeksOfMonth.map((week, weekIdx) => (
 				<tr key={weekIdx}>
 					{week.map((day, dayIdx) => (
-						<td key={`${format(setDate(date, day || -1), "YYYY-MM-DD")}-${weekIdx}-${dayIdx}`}>
+						<td
+							key={`${format(
+								setDate(date, day || -1),
+								"yyyy-LL-dd"
+							)}-${weekIdx}-${dayIdx}`}
+						>
 							<Span
 								fontWeight={FontWeight.SemiBold}
 								color={isToday(date, day || -1) ? "#F012BE" : "#FFF"}
